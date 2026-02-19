@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+
+
+body{
+    font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  background-color: #f5f0f0;
+  overflow-x: hidden;
+}
+
+.container{
+  width: 95%;
+  margin: auto;
+}
+
+
+.link:hover{
+color: #ff5252;
+font-weight: 550;
+}
+.nav-link{
+  font-weight: 600;
+  color: #000;
+  transition: 0.2s ease-in-out;
+}
+.mySwiper{
+  overflow: inherit!important;
+}
+
+.mySwiper .swiper-button-prev,
+.mySwiper .swiper-button-next{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: #fff !important; 
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  min-width:40px;
+  color: #000;
+  padding: 0.5em;
+  box-shadow: 0 1px 1px #0000001f !important;
+}
+
+.mySwiper  .swiper-button-prev::after,
+.mySwiper  .swiper-button-next::after{
+  font-size: 22px!important;
+  font-weight: 500 !important;
+  color: #000 !important;
+}
