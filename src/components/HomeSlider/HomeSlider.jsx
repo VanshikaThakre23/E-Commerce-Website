@@ -1,7 +1,7 @@
 import React from 'react'
 
 import 'swiper/css';
-import { Autoplay, Navigation, Pagination, } from 'swiper/modules';
+import { Autoplay, Navigation,} from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import 'swiper/css';
@@ -11,20 +11,17 @@ import 'swiper/css/pagination';
 const HomeSlider = () => {
   return (
     <>
-      <div className="homepageSlider py-4">
+      <div className="homepageSlider py-4 mb-7">
         <div className="container">
           <Swiper
-            pagination={{
-              type: 'fraction',
-            }}
-            navigation={true}
+       navigation={true}
             autoplay={{
               delay: 6000,
               disableOnInteraction: true
             }}
 
             spaceBetween={30}
-            modules={[Pagination, Navigation, Autoplay]}
+            modules={[ Navigation, Autoplay]}
             className="mySwiper "
           >
 

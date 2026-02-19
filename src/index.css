@@ -9,9 +9,23 @@ body{
   overflow-x: hidden;
 }
 
+::-webkit-scrollbar{
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb{
+  background: rgb(210, 225, 199);
+  border-radius:80px;
+ 
+}
+::-webkit-scrollbar-track{
+  background:rgb(87, 94, 56);
+}
+
 .container{
   width: 95%;
   margin: auto;
+  
 }
 
 
@@ -48,4 +62,37 @@ font-weight: 550;
   font-size: 22px!important;
   font-weight: 500 !important;
   color: #000 !important;
+}
+
+
+.homecatslider{
+  overflow-x: hidden;
+  width: 95%;
+  margin: auto;
+  background-color: #f5f0f0;
+}
+
+.mySwiper .swiper-pagination {
+  margin-top: 20px;
+  position: relative;
+}
+
+.mySwiper .swiper-pagination-bullet {
+  background: #ccc;
+  opacity: 1;
+}
+.mySwiper .swiper-pagination-bullet:hover{
+background: rgb(255, 115, 0) ;
+}
+.mySwiper .swiper-pagination-bullet-active {
+  background: rgb(255, 115, 0);
+}
+
+
+
+.MuiTabs-indicator{
+  background-color: #ff5252 !important;
+}
+.MuiTab-textColorPrimary.Mui-selected{
+  color: #ff5252 !important;
 }
