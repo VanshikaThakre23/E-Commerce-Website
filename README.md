@@ -5,9 +5,10 @@ Full Stack Ecommerce Website.
 Tech Stack Used:
 
 MongoDB 
-Express
-React 
-Node 
+Express js
+React js
+Node js
+
 Status:In Progress
 
 Completed:Header Part
