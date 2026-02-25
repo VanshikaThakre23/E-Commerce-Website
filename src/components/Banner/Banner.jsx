@@ -13,7 +13,7 @@ const Banner = () => {
                 {
                     bannerImg.map((item) => (
 
-                        <div className='flex items-center justify-center w-180 h-66 bg-amber-800 relative  rounded-2xl overflow-hidden'>
+                        <div className='flex items-center justify-center w-180 h-66 bg-amber-800 relative  rounded-2xl overflow-hidden' key={item.id}>
 
                             <img src={item.img} alt="banner-img" className='w-160 h-full transition-transform duration-300 hover:scale-105 '  />
 

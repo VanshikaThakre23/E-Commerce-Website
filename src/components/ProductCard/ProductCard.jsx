@@ -20,7 +20,8 @@ const ProductCard = ({ item , actions=[] }) => {
 
 {
     actions.length>0 && (
-        <div className="absolute top-1 right-0 flex flex-col gap-2 opacity-0 translate-y-5 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+        <div className="absolute top-3 right-2 flex flex-col items-center gap-2
+                  opacity-0 -translate-y-5 group-hover:opacity-100 group-hover:translate-y-1 transition-all duration-300">
 
             {
                 actions.map((action,index)=>(

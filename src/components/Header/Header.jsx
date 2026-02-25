@@ -28,7 +28,7 @@ const Header = () => {
     return (
 
         <>
-            <header className='bg-white'>
+            <header className='bg-white '>
                 <div className="top-strip bg-amber-300 py-2 border-t border-b border-gray-250">
                     <div className="container">
                         <div className="flex items-center justify-between">
@@ -108,7 +108,7 @@ const Header = () => {
                 </div>
 
 
-                <Navigation/>
+              
             </header>
 
 

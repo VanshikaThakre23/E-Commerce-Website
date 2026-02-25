@@ -16,12 +16,17 @@
     "@mui/material": "^7.3.8",
     "@mui/styled-engine-sc": "^7.3.8",
     "@tailwindcss/vite": "^4.1.18",
+    "aos": "^2.3.4",
+    "framer-motion": "^12.34.3",
+    "lucide-react": "^0.575.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-icons": "^5.5.0",
+    "react-intersection-observer": "^10.0.3",
     "react-router-dom": "^7.13.0",
     "styled-components": "^6.3.9",
     "swiper": "^12.1.1",
+    "tailwind-scrollbar-hide": "^4.0.0",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {

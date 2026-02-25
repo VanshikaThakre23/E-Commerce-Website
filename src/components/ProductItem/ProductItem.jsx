@@ -1,53 +1,46 @@
 import Rating from '@mui/material/Rating'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { GoHeart } from "react-icons/go";
-import { IoIosGitCompare } from "react-icons/io";
+import { FaRegHeart } from "react-icons/fa6";
+import { IoGitCompare } from "react-icons/io5";
+import { FaShoppingCart } from "react-icons/fa";
 import { MdOutlineZoomInMap } from "react-icons/md";
-import Button from '@mui/material/Button';
+import ActionIcon from "../Common/ActionIcon";
 
 
-const productItemList = [
-  { id: 1, img: "images/productItem-1.jpg", category: "clothes", title: "jacket", oldPrice: 400, newPrice: 300, discount: 10 },
-  { id: 2, img: "images/productItem-2.jpg", category: "clothes", title: "jacket", oldPrice: 400, newPrice: 300, discount: 10 },
-  { id: 3, img: "images/productItem-3.jpg", category: "clothes", title: "jacket", oldPrice: 400, newPrice: 300, discount: 10 },
-  { id: 4, img: "images/productItem-4.jpg", category: "clothes", title: "jacket", oldPrice: 400, newPrice: 300, discount: 10 },
-  { id: 5, img: "images/productItem-5.jpg", category: "clothes", title: "jacket", oldPrice: 400, newPrice: 300, discount: 10 },
 
-
-  { id: 3, img: "images/productItem-3.jpg", category: "clothes", title: "jacket", oldPrice: 400, newPrice: 300, discount: 10 },
-  { id: 4, img: "images/productItem-4.jpg", category: "clothes", title: "jacket", oldPrice: 400, newPrice: 300, discount: 10 },
-  { id: 5, img: "images/productItem-5.jpg", category: "clothes", title: "jacket", oldPrice: 400, newPrice: 300, discount: 10 },
-
-
-]
-
-const ProductItem = () => {
+const ProductItem = ({ items }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 mt-10  " >
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 mt-10 w-full " >
       {
-        productItemList.map((item) => (
-          <div className="productCard border-2 relative rounded-2xl overflow-hidden" key={item.id}>
+        items.map((item) => (
+          <div className="productCard border-2 relative rounded-2xl group overflow-hidden w-full h-full" key={item.id}>
 
             <div className="productCardimg">
-              <img src={item.img} alt="" />
+              
+              <Link to={"#"}>
+                <div className="img relative w-full h-60 overflow-hidden ">
+                  <img src={item.img} alt="" />
+
+                  <img src={item.alternateimg} alt="" className='absolute  top-0 left-0 transition opacity-0 group-hover:opacity-100 group-hover:scale-105 ' />
+                </div>
+              </Link>
+
             </div>
 
-            <span className='absolute top-0 left-0 bg-red-500 text-white p-2 rounded-br-xl'>{item.discount} %</span>
+            <span className='absolute top-0 left-0 bg-red-500 text-white p-2 rounded-br-xl'>{item.discount} </span>
 
-            <div className="actions absolute top-3 right-0 flex flex-col items-center gap-2">
-  <Button className="min-w-0 w-9 p-2">
-    <GoHeart />
-  </Button>
+            <div className="actions absolute top-3 right-2 flex flex-col items-center gap-2
+                  opacity-0 -translate-y-5 group-hover:opacity-100 group-hover:translate-y-1 transition-all duration-300">
 
-  <Button className="min-w-0 p-2">
-    <IoIosGitCompare />
-  </Button>
 
-  <Button className="min-w-0 p-2">
-    <MdOutlineZoomInMap />
-  </Button>
-</div>
+              <ActionIcon title="Wishlist" Icon={FaRegHeart} />
+              <ActionIcon title="Compare" Icon={IoGitCompare} />
+              <ActionIcon title="Zoom View" Icon={MdOutlineZoomInMap} />
+              <ActionIcon title="Add to Cart" Icon={FaShoppingCart} />
+
+
+            </div>
 
             <div className="productCardtext p-3 flex flex-col gap-1">
               <h4 className='text-sm font-semibold'>{item.category}</h4>

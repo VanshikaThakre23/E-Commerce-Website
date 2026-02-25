@@ -94,18 +94,18 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className='py-2'>
+      <nav className='py-2 shadow-md shadow-gray-400/40'>
         <div className="container flex items-center justify-end gap-8">
 
           <div className="col1 w-[20%]">
-            <Button
+            {/* <Button
               className='text-black! gap-3 w-full'
               onClick={() => setOpenCategory(true)}
             >
               <RiMenu2Fill className='text-xl' />
               Shop By Categories
               <FaAngleDown className='text-xl ml-auto' />
-            </Button>
+            </Button> */}
           </div>
 
           <div className="col2 w-[65%]">
