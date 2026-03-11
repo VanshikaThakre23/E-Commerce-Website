@@ -1,10 +1,19 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Header from './components/Header/Header'
 import Footer from './components/Footer/Footer'
 import HomePage from './Pages/HomePage/HomePage'
 import ProductListing from './Pages/ProductListing/ProductListing'
+import Login from './components/Auth/Login'
+import Register from './components/Auth/Register'
+import ProfilePage from './Pages/ProfilePage/ProfilePage'
+import CartPage from './Pages/CartPage/CartPage';
+import WishlistPage from './Pages/WishlistPage/WishlistPage';
+import AdminDashboard from './Pages/Admin/AdminDashboard';
+import AddProducts from "./Pages/Admin/AddProducts.jsx";
 
 
 const App = () => {
@@ -19,6 +28,16 @@ const App = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/productlisting" element={<ProductListing />} />
+            <Route path="/login" element={<Login/>} />
+            <Route path='register' element={<Register/>}/>
+            <Route path='/profile' element={<ProfilePage/>}/>
+            <Route path='/cart' element={<CartPage/>}/>
+            <Route path='/wishlist' element={<WishlistPage/>}/>
+
+            {/* admin routes */}
+            <Route path='/admindashboard' element={<AdminDashboard/>}/>
+            <Route path='/addProducts' element={<AddProducts/>}/>
+
           </Routes>
         </main>
 
@@ -26,6 +45,8 @@ const App = () => {
 
       </div>
     </BrowserRouter>
+
+    <ToastContainer position='top-right' autoClose={1000}/>
 
     </>
   )

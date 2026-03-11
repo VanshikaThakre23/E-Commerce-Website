@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import HomeSlider from '../../components/HomeSlider/HomeSlider'
 import HomeCategorySlider from '../../components/HomeCategorySlider/HomeCategorySlider'
 
@@ -20,27 +20,38 @@ import testimonials from "../../data/testimonials";
 import { FaTruck, FaRedo, FaLock, FaGift, FaHeadset } from "react-icons/fa";
 import Features from '../../components/Features/Features';
 import SliderType2 from '../../components/SliderType2/SliderType2';
+import axios from 'axios';
 
 
 
 
 const HomePage = () => {
 
-  const [value, setValue] = React.useState(0);
+  const [products,setProducts] = useState([]);
+
+  useEffect(()=>{
+    axios.get("http://localhost:5000/products")
+    .then((res)=>setProducts(res.data))
+    .catch((err)=>console.log(err))
+  },[])
+
+  console.log(products);
+
+  
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   }
 
   const tabsList = [
-    { id: 1, title: "Fashion" },
+    { id: 1, title: "Jewellary" },
     { id: 2, title: "Appliances" },
     { id: 3, title: "Bags" },
     { id: 4, title: "Footwear" },
     { id: 5, title: "Groceries" },
     { id: 6, title: "Beauty" },
     { id: 7, title: "Wellness" },
-    { id: 8, title: "Jewellary" },
   ]
 
   const latestActions = [
@@ -122,7 +133,9 @@ const HomePage = () => {
 
           </div>
 
-          <ProductItem items={productItemList} />
+           <ProductItem items={products} /> 
+
+                
 
           {/* banner image single vali black bg vali*/}
           <div className="banner mt-5  border-2 rounded-2xl overflow-hidden group">

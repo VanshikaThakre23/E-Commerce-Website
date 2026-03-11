@@ -11,7 +11,7 @@ const ProductListing = () => {
             <div className="">
 
                 <div className="container ">
-                    <div className="flex gap-4 mt-3 bg-[#fcf9f9]">
+                    <div className="flex gap-4 mt-3 bg-[#fcf9f9] px-4">
                         <div className="sidebarWrapper ">
                             <Sidebar />
                         </div>

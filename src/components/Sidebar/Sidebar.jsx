@@ -28,7 +28,7 @@ const Sidebar = () => {
                   h-full
                     z-99
                     bg-[#f8f9fa]
-                    transition-all duration-500
+                    transition-all duration-1000
                     overflow-y-auto scrollbar-hide
                     ${isOpen ? "w-72 p-4" : "w-14 p-2"}`}
         >

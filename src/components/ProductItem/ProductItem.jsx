@@ -7,22 +7,39 @@ import { FaShoppingCart } from "react-icons/fa";
 import { MdOutlineZoomInMap } from "react-icons/md";
 import ActionIcon from "../Common/ActionIcon";
 
+import { useContext } from "react";
+import { CartContext } from "../../context/CartContext";
+
 
 
 const ProductItem = ({ items }) => {
+
+  const { addToCart } = useContext(CartContext);
+
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 mt-10 w-full " >
       {
         items.map((item) => (
-          <div className="productCard border-2 relative rounded-2xl group overflow-hidden w-full h-full" key={item.id}>
+          <div className="productCard border-2 relative rounded-2xl group overflow-hidden w-full h-full"
+            key={item._id}>
 
             <div className="productCardimg">
-              
-              <Link to={"#"}>
-                <div className="img relative w-full h-60 overflow-hidden ">
-                  <img src={item.img} alt="" />
 
-                  <img src={item.alternateimg} alt="" className='absolute  top-0 left-0 transition opacity-0 group-hover:opacity-100 group-hover:scale-105 ' />
+              <Link to={"#"}>
+                <div className="img relative w-full h-60 overflow-hidden">
+
+                  {item.img && (
+                    <img src={item.img} alt={item.title} />
+                  )}
+
+                  {item.alternateimg && (
+                    <img
+                      src={item.alternateimg}
+                      alt="alternate-img"
+                      className="absolute top-0 left-0 transition opacity-0 group-hover:opacity-100 group-hover:scale-105"
+                    />
+                  )}
+
                 </div>
               </Link>
 
@@ -37,7 +54,7 @@ const ProductItem = ({ items }) => {
               <ActionIcon title="Wishlist" Icon={FaRegHeart} />
               <ActionIcon title="Compare" Icon={IoGitCompare} />
               <ActionIcon title="Zoom View" Icon={MdOutlineZoomInMap} />
-              <ActionIcon title="Add to Cart" Icon={FaShoppingCart} />
+              <ActionIcon title="Add to Cart" Icon={FaShoppingCart} onClick={() => addToCart(item)} />
 
 
             </div>

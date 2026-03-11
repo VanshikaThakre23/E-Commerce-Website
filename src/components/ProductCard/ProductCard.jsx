@@ -2,6 +2,8 @@ import Rating from "@mui/material/Rating";
 import { Link } from "react-router-dom";
 import ActionIcon from "../Common/ActionIcon";
 
+
+
 const ProductCard = ({ item , actions=[] }) => {
   return (
     <div className="productCard border-2 relative rounded-2xl group overflow-hidden">
@@ -17,7 +19,6 @@ const ProductCard = ({ item , actions=[] }) => {
         </Link>
       </div>
 
-
 {
     actions.length>0 && (
         <div className="absolute top-3 right-2 flex flex-col items-center gap-2
@@ -30,7 +31,7 @@ const ProductCard = ({ item , actions=[] }) => {
                     title={action.title}
                     Icon={action.Icon}
                     onClick={action.onClick}
-                    ></ActionIcon>
+                    ></ActionIcon> 
                 ))
             }
 

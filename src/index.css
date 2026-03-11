@@ -27,9 +27,10 @@ body{
   margin: auto;
   
 }
+/* #036092 -logo ka blue color */
 
 .universalBtn{
-  background:#ff5252 !important;
+  background:#f97502!important;
   color: #fff;
   width: 8rem;
   height: 2.4rem;
@@ -37,15 +38,23 @@ body{
   font-size: 0.8rem;
   cursor: pointer;
 }
+.authBtn{
+  background:#f97502  !important;
+  color: #fff;
+  width: 5rem;
+  height: 2.4rem;
+  padding: 4px;
+  border-radius: 4px;
+}
 
 .link:hover{
-color: #ff5252;
-font-weight: 550;
+color: #036092 ;
+font-weight: 650;
 }
 .nav-link{
   font-weight: 600;
   color: #000;
-  transition: 0.2s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 .mySwiper{
   overflow: inherit!important;

@@ -3,7 +3,7 @@ import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/f
 import { FiPhoneCall, FiMail, FiMapPin } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { FaShippingFast } from "react-icons/fa";
-
+import logo from '/images/logoMK.png'
 
 
 const Footer = () => {
@@ -13,12 +13,12 @@ const Footer = () => {
         <>
 
 
-            <footer className="bg-gray-200 text-gray-700 pt-12 pb-6 rounded-2xl mt-7   ">
+            <footer className="bg-white text-gray-700 pt-12 pb-6 rounded-2xl mt-7   ">
                 <div className=" footerBox container mx-auto px-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 ">
 
                     {/* Logo + About */}
                     <div>
-                        <img src="/images/logo.svg" alt="" className="w-60 mb-5" />
+                        <img src={logo} alt="" className="w-50 mb-5" />
 
                         <p className="text-sm leading-6 text-black">
                             Your one-stop destination for quality products at the best prices.
