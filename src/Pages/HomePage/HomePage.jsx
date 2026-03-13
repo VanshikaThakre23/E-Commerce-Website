@@ -12,39 +12,20 @@ import productItemList from '../../data/products';
 import Banner from '../../components/Banner/Banner';
 import ReusableSlider from '../../components/resusableSlider/reusableSlider';
 import ProductCard from '../../components/ProductCard/ProductCard';
-import { FaRegHeart } from "react-icons/fa6";
-import { IoGitCompare } from "react-icons/io5";
-import { FaShoppingCart } from "react-icons/fa";
 import testimonials from "../../data/testimonials";
-
-import { FaTruck, FaRedo, FaLock, FaGift, FaHeadset } from "react-icons/fa";
 import Features from '../../components/Features/Features';
 import SliderType2 from '../../components/SliderType2/SliderType2';
+
+import { FaTruck, FaRedo, FaLock, FaGift, FaHeadset ,FaShoppingCart} from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa6";
+import { IoGitCompare } from "react-icons/io5";
+
 import axios from 'axios';
-
-
-
 
 const HomePage = () => {
 
-  const [products,setProducts] = useState([]);
 
-  useEffect(()=>{
-    axios.get("http://localhost:5000/products")
-    .then((res)=>setProducts(res.data))
-    .catch((err)=>console.log(err))
-  },[])
-
-  console.log(products);
-
-  
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  }
-
-  const tabsList = [
+    const tabsList = [
     { id: 1, title: "Jewellary" },
     { id: 2, title: "Appliances" },
     { id: 3, title: "Bags" },
@@ -69,9 +50,40 @@ const HomePage = () => {
   ];
 
 
+  const [products, setProducts] = useState([]);
+  const [popularProducts, setPopularProducts] = useState([]);
+  const [latestProducts, setLatestProducts] = useState([]);
+  const [value, setValue] = useState(0);
+  const [selectedCategory , setSelectedCategory] = useState("Jewellary");
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/products")
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.log(err))
+  }, [])
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/products/popular")
+      .then((res) => setPopularProducts(res.data.isPopular));
+
+    axios.get("http://localhost:5000/products/latest")
+      .then((res) => setLatestProducts(res.data.isLatest));
+
+  }, []);
+
+  console.log(products);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    setSelectedCategory(tabsList[newValue].title);
+  }
+
+  const selectedCategoryProducts = popularProducts.filter((item)=>item.category === selectedCategory)
+
+
   return (
     <>
-    <Navigation/>
+      <Navigation />
 
 
       {/* <section className='py-6'>
@@ -133,26 +145,26 @@ const HomePage = () => {
 
           </div>
 
-           <ProductItem items={products} /> 
+          <ProductItem items={selectedCategoryProducts} />
 
-                
+
 
           {/* banner image single vali black bg vali*/}
           <div className="banner mt-5  border-2 rounded-2xl overflow-hidden group">
             <img src="/images/bannerimg1.png" alt="gwrfwefwef" className='transition-all duration-190 group-hover:scale-110 ' />
           </div>
 
-          {/* ------------------------------Latest Product Section------------------------------------- */}
+          {/* ----------------Latest Product Section------------------ */}
           <ReusableSlider
             title="Latest Products"
-            data={productItemList}
+            data={latestProducts}
             renderItem={(item) =>
               <ProductCard item={item} actions={latestActions} />
             }
             slidesPerView={5}
           />
 
-          {/* ------------------------------Testimonial Section------------------------------------------ */}
+          {/* -----------Testimonial Section- logo ke review dikhenge idhr -------------------- */}
           {/* isme customer ke photo and their feedback add krne hai  */}
           <ReusableSlider
             title="See What our Customer Says"
@@ -170,22 +182,14 @@ const HomePage = () => {
             )}
             slidesPerView={4}
           />
-
-
-
-
-
         </div>
-        
-
       </div>
 
 
+      <div className=" mx-auto mt-10">
+        <Features features={featuresData} />
 
-          <div className=" mx-auto mt-10">
-            <Features features={featuresData} />
-
-          </div>
+      </div>
     </>
   )
 }

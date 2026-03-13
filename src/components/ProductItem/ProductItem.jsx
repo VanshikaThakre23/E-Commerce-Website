@@ -1,83 +1,137 @@
-import Rating from '@mui/material/Rating'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import Rating from "@mui/material/Rating";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+
 import { FaRegHeart } from "react-icons/fa6";
 import { IoGitCompare } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdOutlineZoomInMap } from "react-icons/md";
+
 import ActionIcon from "../Common/ActionIcon";
 
-import { useContext } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+
 import { CartContext } from "../../context/CartContext";
 
-
-
-const ProductItem = ({ items }) => {
+const ProductItem = ({ items = [] }) => {
 
   const { addToCart } = useContext(CartContext);
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 mt-10 w-full " >
-      {
-        items.map((item) => (
-          <div className="productCard border-2 relative rounded-2xl group overflow-hidden w-full h-full"
-            key={item._id}>
 
-            <div className="productCardimg">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 mt-10 w-full">
 
-              <Link to={"#"}>
-                <div className="img relative w-full h-60 overflow-hidden">
+      {items.map((item) => (
+
+        <div
+          key={item._id}
+          className="productCard border rounded-2xl relative group overflow-hidden"
+        >
+
+          {/* product ki Img ka slider */}
+          <div className="relative">
+
+            <Link to="#">
+
+
+              <div className="w-full h-60 overflow-hidden rounded-2xl bg-white">
+
+                <Swiper
+                  slidesPerView={1}
+                  loop={true}
+                  grabCursor={true}
+                >
 
                   {item.img && (
-                    <img src={item.img} alt={item.title} />
+                    <SwiperSlide>
+                      <img
+                        src={item.img}
+                        alt={item.title}
+                        className="w-full h-60 object-cover"
+                      />
+                    </SwiperSlide>
                   )}
 
                   {item.alternateimg && (
-                    <img
-                      src={item.alternateimg}
-                      alt="alternate-img"
-                      className="absolute top-0 left-0 transition opacity-0 group-hover:opacity-100 group-hover:scale-105"
-                    />
+                    <SwiperSlide>
+                      <img
+                        src={item.alternateimg}
+                        alt="alternate"
+                        className="w-full h-60 object-cover"
+                      />
+                    </SwiperSlide>
                   )}
 
-                </div>
-              </Link>
+                </Swiper>
 
-            </div>
-
-            <span className='absolute top-0 left-0 bg-red-500 text-white p-2 rounded-br-xl'>{item.discount} </span>
-
-            <div className="actions absolute top-3 right-2 flex flex-col items-center gap-2
-                  opacity-0 -translate-y-5 group-hover:opacity-100 group-hover:translate-y-1 transition-all duration-300">
-
-
-              <ActionIcon title="Wishlist" Icon={FaRegHeart} />
-              <ActionIcon title="Compare" Icon={IoGitCompare} />
-              <ActionIcon title="Zoom View" Icon={MdOutlineZoomInMap} />
-              <ActionIcon title="Add to Cart" Icon={FaShoppingCart} onClick={() => addToCart(item)} />
-
-
-            </div>
-
-            <div className="productCardtext p-3 flex flex-col gap-1">
-              <h4 className='text-sm font-semibold'>{item.category}</h4>
-              <h3 className="text-sm text-gray-600">{item.title}</h3>
-
-              <Rating defaultValue={4} size="small" />
-
-              <div className="productCardPrice flex gap-3">
-                <p className='oldPrice line-through'>{item.oldPrice}</p>
-                <p className='newPrice text-pink-700'>{item.newPrice} </p>
               </div>
-            </div>
-
+            </Link>
 
           </div>
-        ))
-      }
+       {/* <div className="h-2 w-full bg-linear-to-b from-gray-400 to-transparent blur-sm"></div> */}
+
+
+          {/* ACTION ICONS */}
+          <div
+            className="absolute top-3 right-2 flex flex-col gap-2 items-center
+            opacity-0 -translate-y-5 group-hover:opacity-100 group-hover:translate-y-1
+            transition-all duration-300 z-20"
+          >
+
+            <ActionIcon title="Wishlist" Icon={FaRegHeart} />
+
+            <ActionIcon title="Compare" Icon={IoGitCompare} />
+
+            <ActionIcon title="Quick View" Icon={MdOutlineZoomInMap} />
+
+            <ActionIcon
+              title="Add to Cart"
+              Icon={FaShoppingCart}
+              onClick={() => addToCart(item)}
+            />
+
+          </div>
+
+
+          {/* PRODUCT DETAILS */}
+          <div className="p-3 flex flex-col gap-1 bg-blue-50">
+
+            <h3 className="text-md font-semibold">
+              {item.title}
+            </h3>
+
+            <h4 className="text-xs text-gray-500">
+              {item.category}
+            </h4>
+
+            <Rating defaultValue={4} size="small" readOnly />
+
+            <div className="flex gap-3">
+
+              <p className="line-through text-gray-400">
+                {item.oldPrice}
+              </p>
+
+              <p className="text-pink-600 font-semibold">
+                {item.newPrice}
+              </p>
+
+            </div>
+
+            <span className="text-xs text-green-600">
+              {item.discount} discount
+            </span>
+
+          </div>
+
+        </div>
+
+      ))}
+
     </div>
 
-  )
-}
+  );
+};
 
-export default ProductItem
+export default ProductItem;

@@ -4,7 +4,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 const ReusableSlider = ({
-  data,
+  data =[],
   renderItem,
   slidesPerView = 5,
   spaceBetween = 20,
@@ -42,7 +42,7 @@ const ReusableSlider = ({
         }}
         modules={[Navigation]}
       >
-        {data.map((item, index) => (
+        {data?.map((item, index) => (
           <SwiperSlide key={index}>
             {renderItem(item)}
           </SwiperSlide>

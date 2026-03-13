@@ -119,14 +119,10 @@ const Header = () => {
 
                                 <li className='list-none text-[16px] font-medium'>
                                     {loggedIn ? (
-
-
                                         <>
 
-
-
-
-                                            {
+                                        {/* iska mtlb hai agr ye true hai location.pathname !== "/" to && ke baad ka code chalega mtlb home route nhi hai to uska icon dikhao  */}
+                                          {
                                                 location.pathname !== "/" && (
                                                     <Tooltip title="Home">
                                                         <IconButton aria-label="home">

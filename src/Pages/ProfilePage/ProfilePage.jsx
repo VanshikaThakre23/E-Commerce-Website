@@ -1,213 +1,406 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {MapPin,LogOut,Plus,ChevronRight,Phone,Edit3,Trash2 } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 const ProfilePage = () => {
 
   const navigate = useNavigate();
 
+  // ---------- STATE ----------
   const [user, setUser] = useState(null);
   const [activeSection, setActiveSection] = useState("profile");
   const [showAddressForm, setShowAddressForm] = useState(false);
-  const [newAddress, setNewAddress] = useState({});
+  const [editingIndex, setEditingIndex] = useState(null);
 
+  const [newAddress, setNewAddress] = useState({
+    fullName: "",
+    phone: "",
+    houseNo: "",
+    city: "",
+    pincode: ""
+  });
+
+  // ---------- GET USER ----------
   useEffect(() => {
+
     const checkUser = async () => {
       try {
+
         const res = await axios.get(
           "http://localhost:5000/user/me",
           { withCredentials: true }
         );
+
         setUser(res.data.user);
+
       } catch (error) {
+
         navigate("/login");
+
       }
     };
 
     checkUser();
-  }, []);
 
-  const handleAddressChange = (e) => {
-    setNewAddress({ ...newAddress, [e.target.name]: e.target.value });
+  }, [navigate]);
+
+  // ---------- INPUT CHANGE ----------
+  const handleInputChange = (e) => {
+
+    setNewAddress({
+      ...newAddress,
+      [e.target.name]: e.target.value
+    });
+
   };
 
-  const saveAddress = async () => {
+  // ---------- EDIT ADDRESS ----------
+  const handleEditClick = (addressData, index) => {
+
+    setNewAddress(addressData);
+    setEditingIndex(index);
+    setShowAddressForm(true);
+
+    toast("Editing address...", { icon: "📝" });
+
+  };
+
+  // ---------- SAVE ADDRESS ----------
+  const handleSaveAddress = async () => {
+
     try {
-      const res = await axios.post(
+
+      let finalAddressList;
+
+      if (editingIndex !== null) {
+
+        finalAddressList = (user.addresses || []).map((addr, idx) =>
+          idx === editingIndex ? newAddress : addr
+        );
+
+      } else {
+
+        finalAddressList = [...(user.addresses || []), newAddress];
+
+      }
+
+      await axios.post(
         "http://localhost:5000/user/add-address",
-        newAddress,
+        { addresses: finalAddressList },
         { withCredentials: true }
       );
 
-      setUser(res.data.user);
-      setShowAddressForm(false);
+      setUser({ ...user, addresses: finalAddressList });
+
+      resetForm();
+
+      toast.success(
+        editingIndex !== null ? "Address Updated!" : "Address Added!"
+      );
+
     } catch (error) {
-      console.log(error);
+
+      toast.error("Could not save address");
+
     }
+
   };
 
-  const logoutUser = async () => {
-    await axios.get("http://localhost:5000/user/logout", {
-      withCredentials: true,
+  // ---------- DELETE ADDRESS ----------
+  const handleDeleteAddress = async (indexToDelete) => {
+
+    if (!window.confirm("Delete this address?")) return;
+
+    try {
+
+      const filteredAddresses =
+        (user.addresses || []).filter((_, idx) => idx !== indexToDelete);
+
+      await axios.post(
+        "http://localhost:5000/user/add-address",
+        { addresses: filteredAddresses },
+        { withCredentials: true }
+      );
+
+      setUser({ ...user, addresses: filteredAddresses });
+
+      toast.success("Address removed", { icon: "🗑️" });
+
+    } catch (error) {
+
+      toast.error("Failed to delete");
+
+    }
+
+  };
+
+  // ---------- RESET FORM ----------
+  const resetForm = () => {
+
+    setShowAddressForm(false);
+    setEditingIndex(null);
+
+    setNewAddress({
+      fullName: "",
+      phone: "",
+      houseNo: "",
+      city: "",
+      pincode: ""
     });
-    navigate("/login");
+
   };
 
-  const cardStyle = (section) =>
-    `p-6 rounded shadow cursor-pointer transition 
-    ${
-      activeSection === section
-        ? "bg-amber-100 border border-amber-400"
-        : "bg-white hover:shadow-lg"
-    }`;
+  // ---------- LOGOUT ----------
+  const logoutUser = async () => {
 
+    try {
+
+      await axios.get(
+        "http://localhost:5000/user/logout",
+        { withCredentials: true }
+      );
+
+      navigate("/login");
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
+  // ---------- UI ----------
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
 
-      {/* User Info */}
-      <div className="bg-white p-6 rounded shadow mb-8">
-        <h2 className="text-2xl font-bold">{user?.name}</h2>
-        <p className="text-gray-600">{user?.email}</p>
-      </div>
+    <div className="min-h-screen bg-[#fcfcfd] flex flex-col md:flex-row">
 
-      {/* Dashboard Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-10">
+      <Toaster position="top-right" />
 
-        <div
-          onClick={() => setActiveSection("profile")}
-          className={cardStyle("profile")}
-        >
-          <h3 className="text-lg font-semibold">Profile Info</h3>
-          <p className="text-gray-500 text-sm">View profile details</p>
+      {/* SIDEBAR */}
+      <aside className="w-full md:w-80 bg-white border-r p-8 flex flex-col h-screen">
+
+        <div className="flex items-center gap-4 mb-12">
+
+          <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold">
+
+            {user?.name?.charAt(0).toUpperCase()}
+
+          </div>
+
+          <div>
+            <h2 className="font-bold">{user?.name}</h2>
+            <p className="text-xs text-gray-400">Customer</p>
+          </div>
+
         </div>
 
-        <div
-          onClick={() => setActiveSection("orders")}
-          className={cardStyle("orders")}
-        >
-          <h3 className="text-lg font-semibold">My Orders</h3>
-          <p className="text-gray-500 text-sm">Track your orders</p>
-        </div>
+        <nav className="space-y-2 grow">
 
-        <div
-          onClick={() => {
-            setActiveSection("addresses");
-            setShowAddressForm(false);
-          }}
-          className={cardStyle("addresses")}
-        >
-          <h3 className="text-lg font-semibold">Addresses</h3>
-          <p className="text-gray-500 text-sm">Manage addresses</p>
-        </div>
+          {["profile", "orders", "cancelled"].map((id) => (
 
-        <div
-          onClick={() => setActiveSection("cancelled")}
-          className={cardStyle("cancelled")}
-        >
-          <h3 className="text-lg font-semibold">Cancelled Orders</h3>
-        </div>
-
-        <div
-          onClick={() => setActiveSection("wishlist")}
-          className={cardStyle("wishlist")}
-        >
-          <h3 className="text-lg font-semibold">Wishlist</h3>
-        </div>
-
-        <div
-          onClick={logoutUser}
-          className="p-6 rounded shadow cursor-pointer bg-red-100 hover:shadow-lg"
-        >
-          <h3 className="text-lg font-semibold text-red-600">Logout</h3>
-        </div>
-      </div>
-
-      {/* Profile Section */}
-      {activeSection === "profile" && (
-        <div className="bg-white p-6 rounded shadow">
-          <h3 className="text-xl font-semibold mb-3">Profile Info</h3>
-          <p>Name: {user?.name}</p>
-          <p>Email: {user?.email}</p>
-        </div>
-      )}
-
-      {/* Orders Section */}
-      {activeSection === "orders" && (
-        <div className="bg-white p-6 rounded shadow">
-          <h3 className="text-xl font-semibold mb-3">My Orders</h3>
-          <p>No orders yet.</p>
-        </div>
-      )}
-
-      {/* Cancelled Orders */}
-      {activeSection === "cancelled" && (
-        <div className="bg-white p-6 rounded shadow">
-          <h3 className="text-xl font-semibold mb-3">Cancelled Orders</h3>
-          <p>No cancelled orders.</p>
-        </div>
-      )}
-
-      {/* Wishlist */}
-      {activeSection === "wishlist" && (
-        <div className="bg-white p-6 rounded shadow">
-          <h3 className="text-xl font-semibold mb-3">Wishlist</h3>
-          <p>No items in wishlist.</p>
-        </div>
-      )}
-
-      {/* Address Section */}
-      {activeSection === "addresses" && (
-        <div className="bg-white p-6 rounded shadow">
-
-          <div className="flex justify-between mb-4">
-            <h3 className="text-xl font-semibold">My Addresses</h3>
             <button
-              onClick={() => setShowAddressForm(!showAddressForm)}
-              className="bg-amber-500 text-white px-4 py-1 rounded"
+              key={id}
+              onClick={() => {
+                setActiveSection(id);
+                resetForm();
+              }}
+              className={`w-full flex justify-between p-3 rounded-lg ${activeSection === id
+                  ? "bg-gray-300 text-black"
+                  : "hover:bg-gray-100"
+                }`}
             >
-              + Add Address
+              {id}
+              <ChevronRight size={14} />
             </button>
-          </div>
 
-          {/* Address List */}
-          <div className="grid grid-cols-2 gap-4">
-            {user?.addresses?.map((addr, index) => (
-              <div key={index} className="border p-4 rounded">
-                <p className="font-semibold">{addr.fullName}</p>
-                <p>{addr.houseNo}, {addr.area}</p>
-                <p>{addr.city}, {addr.state}</p>
-                <p>{addr.pincode}</p>
-                <p>{addr.phone}</p>
-              </div>
-            ))}
-          </div>
+          ))}
 
-          {/* Address Form */}
-          {showAddressForm && (
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <input name="fullName" placeholder="Full Name" onChange={handleAddressChange} className="border p-2 rounded"/>
-              <input name="phone" placeholder="Phone" onChange={handleAddressChange} className="border p-2 rounded"/>
-              <input name="pincode" placeholder="Pincode" onChange={handleAddressChange} className="border p-2 rounded"/>
-              <input name="city" placeholder="City" onChange={handleAddressChange} className="border p-2 rounded"/>
-              <input name="state" placeholder="State" onChange={handleAddressChange} className="border p-2 rounded"/>
-              <input name="houseNo" placeholder="House No" onChange={handleAddressChange} className="border p-2 rounded"/>
-              <input name="area" placeholder="Area" onChange={handleAddressChange} className="border p-2 rounded"/>
-              <input name="landmark" placeholder="Landmark" onChange={handleAddressChange} className="border p-2 rounded"/>
+        </nav>
 
-              <button
-                onClick={saveAddress}
-                className="col-span-2 bg-green-600 text-white py-2 rounded"
-              >
-                Save Address
-              </button>
+        <button
+          onClick={logoutUser}
+          className="mt-10 flex items-center gap-3 text-red-500"
+        >
+          <LogOut size={18} /> Logout
+        </button>
+
+      </aside>
+
+      {/* MAIN CONTENT */}
+      <main className="flex-1 p-10">
+
+        {activeSection === "profile" && (
+
+          <div className="max-w-3xl">
+
+            <h1 className="text-3xl font-bold mb-6">My Account</h1>
+
+            <div className="grid grid-cols-2 gap-6 mb-10">
+
+              <DetailCard label="Full Name" value={user?.name} />
+              <DetailCard label="Email" value={user?.email} />
+
             </div>
-          )}
 
-        </div>
-      )}
+            {/* ADDRESS SECTION */}
+            <div className="bg-white p-8 rounded-xl border">
+
+              <div className="flex justify-between mb-6">
+
+                <h3 className="font-bold flex items-center gap-2">
+                  <MapPin /> Saved Addresses
+                </h3>
+
+                {!showAddressForm && (
+
+                  <button
+                    onClick={() => setShowAddressForm(true)}
+                    className="universalBtn px-1  rounded flex items-center gap-2"
+                  >
+                    <Plus size={16} /> Add Address
+                  </button>
+
+                )}
+
+              </div>
+
+              {/* ADDRESS LIST */}
+              <div className="grid md:grid-cols-2 gap-4">
+
+                {user?.addresses
+                  ?.filter(addr => addr.fullName || addr.phone || addr.city)
+                  ?.map((addr, index) => (
+
+                    <div
+                      key={index}
+                      className="border p-4 rounded-lg relative"
+                    >
+
+                      <div className="absolute right-2 top-2 flex gap-2">
+
+                        <button
+                          onClick={() => handleEditClick(addr, index)}
+                        >
+                          <Edit3 size={16} />
+                        </button>
+
+                        <button
+                          onClick={() => handleDeleteAddress(index)}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+
+                      </div>
+
+                      <p className="font-semibold">{addr.fullName}</p>
+
+                      <p className="text-sm text-gray-600">
+                        {addr.houseNo}, {addr.city}
+                      </p>
+
+                      <p className="text-sm">{addr.pincode}</p>
+
+                      <p className="text-xs flex gap-1 mt-2">
+                        <Phone size={12} /> {addr.phone}
+                      </p>
+
+                    </div>
+
+                  ))}
+
+              </div>
+
+              {/* ADDRESS FORM */}
+              {showAddressForm && (
+
+                <div className="mt-8 grid gap-3">
+
+                  <CustomInput
+                    name="fullName"
+                    value={newAddress.fullName}
+                    placeholder="Full Name"
+                    onChange={handleInputChange}
+                  />
+
+                  <CustomInput
+                    name="phone"
+                    value={newAddress.phone}
+                    placeholder="Phone"
+                    onChange={handleInputChange}
+                  />
+
+                  <CustomInput
+                    name="houseNo"
+                    value={newAddress.houseNo}
+                    placeholder="House / Area"
+                    onChange={handleInputChange}
+                  />
+
+                  <CustomInput
+                    name="city"
+                    value={newAddress.city}
+                    placeholder="City"
+                    onChange={handleInputChange}
+                  />
+
+                  <CustomInput
+                    name="pincode"
+                    value={newAddress.pincode}
+                    placeholder="Pincode"
+                    onChange={handleInputChange}
+                  />
+
+                  <button
+                    onClick={handleSaveAddress}
+                    className="bg-green-600 text-white py-2 rounded"
+                  >
+                    {editingIndex !== null
+                      ? "Update Address"
+                      : "Save Address"}
+                  </button>
+
+                </div>
+
+              )}
+
+            </div>
+
+          </div>
+
+        )}
+
+      </main>
 
     </div>
+
   );
+
 };
+
+// ---------- SMALL COMPONENTS ----------
+
+const DetailCard = ({ label, value }) => (
+
+  <div className="bg-white p-5 border rounded-lg">
+
+    <p className="text-xs text-gray-400">{label}</p>
+
+    <p className="font-semibold">{value}</p>
+
+  </div>
+
+);
+
+const CustomInput = ({ ...props }) => (
+
+  <input
+    {...props}
+    className="border p-3 rounded w-full"
+  />
+
+);
 
 export default ProfilePage;

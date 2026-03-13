@@ -14,6 +14,8 @@ import CartPage from './Pages/CartPage/CartPage';
 import WishlistPage from './Pages/WishlistPage/WishlistPage';
 import AdminDashboard from './Pages/Admin/AdminDashboard';
 import AddProducts from "./Pages/Admin/AddProducts.jsx";
+import AdminSidebar from './Pages/Admin/AdminSidebar.jsx';
+import ViewUsers from './Pages/Admin/ViewUsers.jsx';
 
 
 const App = () => {
@@ -35,9 +37,10 @@ const App = () => {
             <Route path='/wishlist' element={<WishlistPage/>}/>
 
             {/* admin routes */}
-            <Route path='/admindashboard' element={<AdminDashboard/>}/>
+            <Route path='/adminHome' element={<AdminDashboard/>}/>
             <Route path='/addProducts' element={<AddProducts/>}/>
-
+            <Route path='/admin' element={<AdminSidebar/>}/>
+            <Route path='/viewUsers' element={<ViewUsers/>}/>
           </Routes>
         </main>
 

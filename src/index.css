@@ -150,3 +150,15 @@ background: rgb(255, 115, 0) ;
   background: #ff5252;
   opacity: 1;
 }
+
+.productSwiper .swiper-button-next,
+.productSwiper .swiper-button-prev{
+  /* transform: scale(0.5);    */
+opacity:0;
+  width: 0.9rem;
+}
+
+.productCard:hover .swiper-button-next,
+.productCard:hover .swiper-button-prev{
+opacity:1;
+}

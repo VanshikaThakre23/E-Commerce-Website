@@ -1,21 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from 'react-router-dom';
+import AdminSidebar from "./AdminSidebar";
 
 const AdminDashboard = () => {
+  const[totalUser , setTotalUser ] = useState(0);
+  const[totalProducts , setTotalProducts ] = useState(0);
+
+  // const location = useLocation();
+
+  useEffect(()=>{
+    const userCount = async()=>{
+      const res = await fetch("http://localhost:5000/user/totalUser");
+      const data = await res.json();
+      setTotalUser(data.totalUser);
+    };
+    userCount();
+  },[]);
+
+
+  useEffect(()=>{
+    const productCount = async()=>{
+      const res = await fetch("http://localhost:5000/products/totalProducts");
+      const data = await res.json();
+      setTotalProducts(data.totalProducts);
+    };
+    productCount();
+  },[]);
+
+
+
   return (
     <div className="flex min-h-screen bg-gray-100">
 
       {/* Sidebar */}
-      <div className="w-64 bg-black text-white p-6">
-        <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
-
-        <ul className="space-y-4">
-          <li className="cursor-pointer hover:text-gray-300">Dashboard</li>
-          <li className="cursor-pointer hover:text-gray-300">Add Product</li>
-          <li className="cursor-pointer hover:text-gray-300">Manage Products</li>
-          <li className="cursor-pointer hover:text-gray-300">Orders</li>
-          <li className="cursor-pointer hover:text-gray-300">Users</li>
-        </ul>
-      </div>
+     <AdminSidebar/>
 
       {/* Main Content */}
       <div className="flex-1 p-8">
@@ -27,22 +45,28 @@ const AdminDashboard = () => {
 
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500">Total Products</h3>
-            <p className="text-2xl font-bold mt-2">120</p>
+            <p className="text-2xl font-bold mt-2">{totalProducts}</p>
           </div>
+
+
+           <div className="bg-white p-6 rounded-lg shadow">
+            <Link to={"/users"}>
+            <h3 className="text-gray-500">Total User</h3>
+            <p className="text-2xl font-bold mt-2">{totalUser}</p>
+            </Link>
+          </div>
+
 
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500">Total Orders</h3>
-            <p className="text-2xl font-bold mt-2">45</p>
+            <p className="text-2xl font-bold mt-2">not done </p>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-gray-500">Users</h3>
-            <p className="text-2xl font-bold mt-2">60</p>
-          </div>
+         
 
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500">Revenue</h3>
-            <p className="text-2xl font-bold mt-2">$3200</p>
+            <p className="text-2xl font-bold mt-2">not done</p>
           </div>
 
         </div>

@@ -59,7 +59,7 @@ const HomeCategorySlider = () => {
             categorySlider.map((item) => (
 
               <SwiperSlide key={item.id}>
-                <Link to={"/"} >
+                <Link to={"/productlisting"} >
                   <div className='relative w-45 h-45  bg-white rounded-2xl text-center flex items-center justify-between flex-col '>
                     <img src={item.img} alt="" className="w-40  rounded-2xl mt-2" />
 

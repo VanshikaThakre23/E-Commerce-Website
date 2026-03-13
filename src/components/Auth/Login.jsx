@@ -23,6 +23,12 @@ const Login = () => {
         { withCredentials: true },
       )
 
+      if(res.data.user.role === "admin"){
+        navigate("/admin");
+      }else{
+        navigate("/");
+      }
+
       toast.success(res.data.message);
       navigate("/");
       window.location.reload()

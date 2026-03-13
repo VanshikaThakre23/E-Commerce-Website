@@ -52,7 +52,7 @@ const Register = () => {
 
                         <div className="flex flex-col">
                             <label className="mb-1 text-sm font-medium">
-                                Enter Your Name
+                                Enter Your Name *
                             </label>
                             <input
                                 type="text"
@@ -67,7 +67,7 @@ const Register = () => {
 
                         <div className="flex flex-col">
                             <label className="mb-1 text-sm font-medium">
-                                Enter Your Email
+                                Enter Your Email *
                             </label>
                             <input
                                 type="email"
@@ -81,7 +81,7 @@ const Register = () => {
 
                         <div className="flex flex-col">
                             <label className="mb-1 text-sm font-medium">
-                                Enter Your Password
+                                Enter Your Password *
                             </label>
                             <input
                                 type="password"

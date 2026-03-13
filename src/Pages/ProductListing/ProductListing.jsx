@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Sidebar from '../../components/Sidebar/Sidebar'
-
-import productItemList from '../../data/products'
-
 import ProductItem from '../../components/ProductItem/ProductItem'
+import axios from 'axios'
+
 
 const ProductListing = () => {
+    const [products, setProducts] = useState([]);
+
+
+    useEffect(() => {
+        axios.get("http://localhost:5000/products")
+            .then((res => setProducts(res.data)));
+    }, [])
     return (
         <>
             <div className="">
@@ -17,8 +23,8 @@ const ProductListing = () => {
                         </div>
 
                         <div className="gridWrapper">
-                          <ProductItem items={productItemList}/>
-                          
+                            <ProductItem items={products} />
+
                         </div>
                     </div>
                 </div>
