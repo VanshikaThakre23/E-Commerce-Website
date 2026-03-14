@@ -16,7 +16,7 @@ import testimonials from "../../data/testimonials";
 import Features from '../../components/Features/Features';
 import SliderType2 from '../../components/SliderType2/SliderType2';
 
-import { FaTruck, FaRedo, FaLock, FaGift, FaHeadset ,FaShoppingCart} from "react-icons/fa";
+import { FaTruck, FaRedo, FaLock, FaGift, FaHeadset, FaShoppingCart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
 import { IoGitCompare } from "react-icons/io5";
 
@@ -25,7 +25,7 @@ import axios from 'axios';
 const HomePage = () => {
 
 
-    const tabsList = [
+  const tabsList = [
     { id: 1, title: "Jewellary" },
     { id: 2, title: "Appliances" },
     { id: 3, title: "Bags" },
@@ -54,7 +54,7 @@ const HomePage = () => {
   const [popularProducts, setPopularProducts] = useState([]);
   const [latestProducts, setLatestProducts] = useState([]);
   const [value, setValue] = useState(0);
-  const [selectedCategory , setSelectedCategory] = useState("Jewellary");
+  const [selectedCategory, setSelectedCategory] = useState("Jewellary");
 
   useEffect(() => {
     axios.get("http://localhost:5000/products")
@@ -78,9 +78,9 @@ const HomePage = () => {
     setSelectedCategory(tabsList[newValue].title);
   }
 
-  const selectedCategoryProducts = popularProducts.filter((item)=>item.category === selectedCategory)
 
-
+  const selectedCategoryProducts = popularProducts.filter((item) => item.category.includes(selectedCategory));
+  
   return (
     <>
       <Navigation />

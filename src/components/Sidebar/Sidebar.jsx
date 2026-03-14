@@ -5,17 +5,16 @@ import Radio from '@mui/material/Radio';
 import Slider from "@mui/material/Slider";
 import { X } from "lucide-react";
 
-const categories = ["MEN", "WOMEN", "KIDS", "BAGS","FOOTWEAR","GROCERIES", "ACCESSORIES" ,"BEAUTY","JEWELLARY"];
+const categories = ["Men", "Women", "Kids", "Bags","Footwear","Groceries", "Accessories" ,"Beauty","Jewellary"];
 
-const Sidebar = () => {
+const Sidebar = ({selectedCategory , setSelectedCategory}) => {
     const [isOpen, setIsOpen] = useState(true);
-    const [selected, setSelected] = useState("");
     const [priceRange, setPriceRange] = useState([0, 10000]);
     const [sortBy, setSortBy] = useState("");
     const [rating, setRating] = useState(null);
 
     const handleCategory = (item) => {
-        setSelected(item);
+        setSelectedCategory (item);
     };
 
     const handleRange = (event, newValue) => {
@@ -52,7 +51,7 @@ const Sidebar = () => {
                         {categories.map((item) => (
                             <div key={item} className="flex items-center gap-2 mb-2">
                                 <Radio
-                                    checked={selected === item}
+                                    checked={selectedCategory === item}
                                     onChange={() => handleCategory(item)}
                                 />
 

@@ -26,7 +26,7 @@ const ProductItem = ({ items = [] }) => {
 
         <div
           key={item._id}
-          className="productCard border rounded-2xl relative group overflow-hidden"
+          className="productCard border rounded-2xl relative group overflow-hidden w-60"
         >
 
           {/* product ki Img ka slider */}
