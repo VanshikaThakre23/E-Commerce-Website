@@ -5,13 +5,11 @@ const AdminSidebar = () => {
 
     const location = useLocation();
 
-    const getClass = (path) =>{
-        
-    }
+   
 
     return (
         <>
-            <div className="w-64 bg-gray-100 text-black font-semibold p-6">
+            <div className="w-64 bg-gray-100 text-black font-semibold p-6 border-r-[#d8d0d0] border-r-2">
                 <h2 className="text-2xl font-bold mb-6 text-[#ef6820]">Admin Panel</h2>
 
                 <ul className="space-y-4">

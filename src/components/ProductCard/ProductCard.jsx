@@ -4,40 +4,40 @@ import ActionIcon from "../Common/ActionIcon";
 
 
 
-const ProductCard = ({ item , actions=[] }) => {
+const ProductCard = ({ item, actions = [] }) => {
   return (
-    <div className="productCard border-2 relative rounded-2xl group overflow-hidden">
-      
+    <div className="productCard border-2 relative rounded-2xl group overflow-hidden h-100">
+
       {/* Image Section */}
-      <div className="productCardimg relative overflow-hidden">
-        <Link to="#">
+      <div className="productCardimg relative overflow-hidden w-full h-72 bg-gray-100">
+        <Link to={`/products/${item._id}`} className="block w-full h-full">
           <img
             src={item.img}
             alt={item.title}
-            className="transition duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
         </Link>
       </div>
 
-{
-    actions.length>0 && (
-        <div className="absolute top-3 right-2 flex flex-col items-center gap-2
+      {
+        actions.length > 0 && (
+          <div className="absolute top-3 right-2 flex flex-col items-center gap-2
                   opacity-0 -translate-y-5 group-hover:opacity-100 group-hover:translate-y-1 transition-all duration-300">
 
             {
-                actions.map((action,index)=>(
-                    <ActionIcon
-                    key={index}
-                    title={action.title}
-                    Icon={action.Icon}
-                    onClick={action.onClick}
-                    ></ActionIcon> 
-                ))
+              actions.map((action, index) => (
+                <ActionIcon
+                  key={index}
+                  title={action.title}
+                  Icon={action.Icon}
+                  onClick={action.onClick}
+                ></ActionIcon>
+              ))
             }
 
-        </div>
-    )
-}
+          </div>
+        )
+      }
 
 
       {/* Discount Badge */}
@@ -56,10 +56,10 @@ const ProductCard = ({ item , actions=[] }) => {
 
         <div className="flex gap-3">
           <p className="line-through text-gray-400">
-            ₹{item.oldPrice}
+            Rs .{item.oldPrice}
           </p>
           <p className="text-pink-700 font-semibold">
-            ₹{item.newPrice}
+            Rs. {item.newPrice}
           </p>
         </div>
       </div>

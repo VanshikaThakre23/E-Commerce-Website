@@ -5,7 +5,8 @@ import Radio from '@mui/material/Radio';
 import Slider from "@mui/material/Slider";
 import { X } from "lucide-react";
 
-const categories = ["Men", "Women", "Kids", "Bags","Footwear","Groceries", "Accessories" ,"Beauty","Jewellary"];
+const categories = 
+["Men", "Women", "Kids", "Bags","Footwear","Groceries", "Accessories" ,"Beauty","Jewellary"];
 
 const Sidebar = ({selectedCategory , setSelectedCategory}) => {
     const [isOpen, setIsOpen] = useState(true);
@@ -142,7 +143,7 @@ const Sidebar = ({selectedCategory , setSelectedCategory}) => {
                     {/* Clear All */}
                     <button
                         onClick={() => {
-                            setSelected([]);
+                          setSelectedCategory("");
                             setPriceRange([0, 10000]);
                             setRating(null);
                             setSortBy("");

@@ -32,7 +32,11 @@ const HomePage = () => {
     { id: 4, title: "Footwear" },
     { id: 5, title: "Groceries" },
     { id: 6, title: "Beauty" },
-    { id: 7, title: "Wellness" },
+    { id: 7, title: "Men" },
+    { id: 8, title: "Women" },
+    { id: 9, title: "Kids" },
+    
+
   ]
 
   const latestActions = [
@@ -64,10 +68,10 @@ const HomePage = () => {
 
   useEffect(() => {
     axios.get("http://localhost:5000/products/popular")
-      .then((res) => setPopularProducts(res.data.isPopular));
+      .then((res) => setPopularProducts(res.data));
 
     axios.get("http://localhost:5000/products/latest")
-      .then((res) => setLatestProducts(res.data.isLatest));
+      .then((res) => setLatestProducts(res.data));
 
   }, []);
 
@@ -78,8 +82,14 @@ const HomePage = () => {
     setSelectedCategory(tabsList[newValue].title);
   }
 
+const selectedCategoryProducts = (popularProducts || []).filter((item) =>
+  item.category?.map(c => c.trim().toLowerCase())
+  .includes(selectedCategory.trim().toLowerCase())
+);
 
-  const selectedCategoryProducts = popularProducts.filter((item) => item.category.includes(selectedCategory));
+console.log("popularProducts", popularProducts);
+console.log("selectedCategory", selectedCategory);
+console.log("filtered", selectedCategoryProducts);
   
   return (
     <>

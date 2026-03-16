@@ -32,7 +32,7 @@ const ProductItem = ({ items = [] }) => {
           {/* product ki Img ka slider */}
           <div className="relative">
 
-            <Link to="#">
+            <Link to={`/products/${item._id}`}>
 
 
               <div className="w-full h-60 overflow-hidden rounded-2xl bg-white">
@@ -97,12 +97,12 @@ const ProductItem = ({ items = [] }) => {
           {/* PRODUCT DETAILS */}
           <div className="p-3 flex flex-col gap-1 bg-blue-50">
 
-            <h3 className="text-md font-semibold">
+            <h3 className="text-md font-semibold uppercase">
               {item.title}
             </h3>
 
             <h4 className="text-xs text-gray-500">
-              {item.category}
+             {item.category?.join(", ")}
             </h4>
 
             <Rating defaultValue={4} size="small" readOnly />
@@ -113,14 +113,14 @@ const ProductItem = ({ items = [] }) => {
                 {item.oldPrice}
               </p>
 
-              <p className="text-pink-600 font-semibold">
+              <p className="text-pink-600 font-semibold ">
                 {item.newPrice}
               </p>
 
             </div>
 
-            <span className="text-xs text-green-600">
-              {item.discount} discount
+            <span className="text-md text-green-600">
+              {item.discount}% discount
             </span>
 
           </div>

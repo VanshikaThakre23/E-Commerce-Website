@@ -16,6 +16,8 @@ import AdminDashboard from './Pages/Admin/AdminDashboard';
 import AddProducts from "./Pages/Admin/AddProducts.jsx";
 import AdminSidebar from './Pages/Admin/AdminSidebar.jsx';
 import ViewUsers from './Pages/Admin/ViewUsers.jsx';
+import ProductDetails from './Pages/ProductDetailsPage/ProductDetails.jsx';
+import ManageProducts from './Pages/Admin/ManageProducts.jsx';
 
 
 const App = () => {
@@ -35,12 +37,15 @@ const App = () => {
             <Route path='/profile' element={<ProfilePage/>}/>
             <Route path='/cart' element={<CartPage/>}/>
             <Route path='/wishlist' element={<WishlistPage/>}/>
+             <Route path='/products/:id' element={<ProductDetails/>}/>
 
             {/* admin routes */}
             <Route path='/adminHome' element={<AdminDashboard/>}/>
             <Route path='/addProducts' element={<AddProducts/>}/>
-            <Route path='/admin' element={<AdminSidebar/>}/>
+            {/* <Route path='/admin' element={<AdminSidebar/>}/> */}
             <Route path='/viewUsers' element={<ViewUsers/>}/>
+            <Route path='/manageProducts' element={<ManageProducts/>}/>
+
           </Routes>
         </main>
 
