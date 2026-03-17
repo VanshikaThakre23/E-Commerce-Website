@@ -6,17 +6,23 @@ import axios from 'axios'
 
 const ProductListing = () => {
     const [products, setProducts] = useState([]);
-    const [selectedCategory , setSelectedCategory] = useState("Jewellary");
-    
+    const [selectedCategory, setSelectedCategory] = useState("All");
+
 
 
     useEffect(() => {
-        axios.get("http://localhost:5000/products")
+        axios.get("http://localhost:5000/products/popular")
             .then((res => setProducts(res.data)));
     }, []);
 
 
-    const filteredProducts = selectedCategory ? products.filter((p)=> p.category === selectedCategory): products;
+    const filteredProducts =
+        selectedCategory === "All"
+            ? products
+            : products.filter((p) =>
+                p.category?.includes(selectedCategory)
+            );
+
     return (
         <>
             <div className="">
@@ -25,13 +31,15 @@ const ProductListing = () => {
                     <div className="flex gap-4 mt-3 bg-[#fcf9f9] px-4">
                         <div className="sidebarWrapper ">
                             <Sidebar
-                            selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+                                selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
                         </div>
 
-                        <div className="gridWrapper">
+                       
+
+                        <div className="gridWrapper w-full">
                             <ProductItem items={filteredProducts} />
-
                         </div>
+
                     </div>
                 </div>
             </div>

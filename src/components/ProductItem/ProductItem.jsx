@@ -20,14 +20,13 @@ const ProductItem = ({ items = [] }) => {
 
   return (
 
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 mt-10 w-full">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 mt-10 w-full justify-items-center">
 
       {items.map((item) => (
 
         <div
           key={item._id}
-          className="productCard border rounded-2xl relative group overflow-hidden w-60"
-        >
+className="productCard border rounded-2xl relative group overflow-hidden w-full max-w-[240px]"        >
 
           {/* product ki Img ka slider */}
           <div className="relative">
