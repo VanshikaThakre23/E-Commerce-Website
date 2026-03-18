@@ -12,9 +12,9 @@ const AddProducts = () => {
     category: [],
     img: null,
     alternateimg: null,
-    oldPrice: "--",
-    newPrice: "--",
-    discount: "--",
+    oldPrice: "",
+    newPrice: "",
+    discount: "",
     popularSection: false,
     latestSection: false,
   });
@@ -61,6 +61,20 @@ const AddProducts = () => {
     try {
       await axios.post("http://localhost:5000/products", formData);
       toast.success("Product Added!");
+
+      setProduct({
+        title: "",
+        category: [],
+        img: null,
+        alternateimg: null,
+        oldPrice: "",
+        newPrice: "",
+        discount: "",
+        popularSection: false,
+        latestSection: false,
+      })
+
+
     } catch (error) {
       console.error(error);
     }
@@ -103,11 +117,11 @@ const AddProducts = () => {
             <div className="flex gap-4">
               <div className="flex-1">
                 <label className="block text-sm font-medium mb-1">Old Price</label>
-                <input type="number" name="newPrice" value={product.newPrice} onChange={handleChange} className="w-full border p-2 rounded" />
+                <input type="number" name="oldPrice" value={product.oldPrice} onChange={handleChange} className="w-full border p-2 rounded" />
               </div>
               <div className="flex-1">
                 <label className="block text-sm font-medium mb-1">New Price</label>
-                <input type="number" name="oldPrice" value={product.oldPrice} onChange={handleChange} className="w-full border p-2 rounded" />
+                <input type="number" name="newPrice" value={product.newPrice} onChange={handleChange} className="w-full border p-2 rounded" />
               </div>
               <div className="flex-1">
                 <label className="block text-sm font-medium mb-1">Discount (%)</label>
@@ -143,8 +157,8 @@ const AddProducts = () => {
                   )}
 
                   <div className="absolute bottom-0 right-0 text-gray-500 p-1 rounded-full text-md">
-                   <FaEdit size={19}/>
-                   
+                    <FaEdit size={19} />
+
                   </div>
                 </label>
               </div>
@@ -174,9 +188,9 @@ const AddProducts = () => {
                     </div>
                   )}
 
-                   <div className="absolute bottom-0 right-0 text-gray-500 p-1 rounded-full text-md">
-                   <FaEdit size={18}/>
-                   
+                  <div className="absolute bottom-0 right-0 text-gray-500 p-1 rounded-full text-md">
+                    <FaEdit size={18} />
+
                   </div>
                 </label>
               </div>

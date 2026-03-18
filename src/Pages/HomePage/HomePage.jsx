@@ -26,10 +26,10 @@ const HomePage = () => {
 
 
   const tabsList = [
-    { id: 1, title: "Jewellary" },
+    { id: 1, title: "Footwear" },
     { id: 2, title: "Appliances" },
     { id: 3, title: "Bags" },
-    { id: 4, title: "Footwear" },
+    { id: 4, title: "Jewellary" },
     { id: 5, title: "Groceries" },
     { id: 6, title: "Beauty" },
     { id: 7, title: "Men" },

@@ -6,13 +6,11 @@ import { FaRegHeart } from "react-icons/fa6";
 import { IoGitCompare } from "react-icons/io5";
 import { FaShoppingCart } from "react-icons/fa";
 import { MdOutlineZoomInMap } from "react-icons/md";
-
 import ActionIcon from "../Common/ActionIcon";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-
 import { CartContext } from "../../context/CartContext";
+import { Pagination } from "swiper/modules";
 
 const ProductItem = ({ items = [] }) => {
 
@@ -26,20 +24,19 @@ const ProductItem = ({ items = [] }) => {
 
         <div
           key={item._id}
-className="productCard border rounded-2xl relative group overflow-hidden w-full max-w-[240px]"        >
+          className="productCard border rounded-2xl relative group overflow-hidden w-full max-w-60">
 
           {/* product ki Img ka slider */}
           <div className="relative">
 
             <Link to={`/products/${item._id}`}>
-
-
               <div className="w-full h-60 overflow-hidden rounded-2xl bg-white">
-
                 <Swiper
                   slidesPerView={1}
                   loop={true}
                   grabCursor={true}
+                  pagination={true}
+                  modules={[Pagination]}
                 >
 
                   {item.img && (
@@ -63,12 +60,10 @@ className="productCard border rounded-2xl relative group overflow-hidden w-full 
                   )}
 
                 </Swiper>
-
               </div>
             </Link>
-
           </div>
-       {/* <div className="h-2 w-full bg-linear-to-b from-gray-400 to-transparent blur-sm"></div> */}
+          {/* <div className="h-2 w-full bg-linear-to-b from-gray-400 to-transparent blur-sm"></div> */}
 
 
           {/* ACTION ICONS */}
@@ -79,10 +74,9 @@ className="productCard border rounded-2xl relative group overflow-hidden w-full 
           >
 
             <ActionIcon title="Wishlist" Icon={FaRegHeart} />
-
-            <ActionIcon title="Compare" Icon={IoGitCompare} />
-
-            <ActionIcon title="Quick View" Icon={MdOutlineZoomInMap} />
+            <Link to={`/products/${item._id}`}>
+              <ActionIcon title="Quick View" Icon={MdOutlineZoomInMap} />
+            </Link>
 
             <ActionIcon
               title="Add to Cart"
@@ -94,26 +88,26 @@ className="productCard border rounded-2xl relative group overflow-hidden w-full 
 
 
           {/* PRODUCT DETAILS */}
-          <div className="p-3 flex flex-col gap-1 bg-blue-50">
+          <div className="p-3 flex flex-col gap-1">
 
             <h3 className="text-md font-semibold uppercase">
               {item.title}
             </h3>
 
             <h4 className="text-xs text-gray-500">
-             {item.category?.join(", ")}
+              {item.category?.join(", ")}
             </h4>
 
             <Rating defaultValue={4} size="small" readOnly />
 
             <div className="flex gap-3">
 
-              <p className="line-through text-gray-400">
-                {item.oldPrice}
+              <p className="line-through  text-gray-800">
+                Rs.{item.oldPrice}
               </p>
 
               <p className="text-pink-600 font-semibold ">
-                {item.newPrice}
+                Rs.{item.newPrice}
               </p>
 
             </div>

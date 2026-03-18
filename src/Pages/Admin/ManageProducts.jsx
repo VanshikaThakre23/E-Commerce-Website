@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import AdminSidebar from "./AdminSidebar";
-
+import swal from 'sweetalert';
 
 
 const ManageProducts = () => {
@@ -20,10 +20,23 @@ const ManageProducts = () => {
   useEffect(() => { fetchProducts(); }, []);
 
   const deleteProduct = async (id) => {
-    if (!window.confirm("Delete this item?")) return;
+
+    const willDelete = await swal({
+      title: "Are you sure?",
+      text: "Are you sure that you want to delete this file?",
+      icon: "warning",
+      dangerMode: true,
+      buttons:true,
+    });
+
+    if (!willDelete) {
+      return;
+    }
+
+
     try {
       await axios.delete(`http://localhost:5000/products/${id}`);
-      toast.success("Deleted");
+      swal("Deleted!", "Your product has been deleted!", "success");
       fetchProducts();
     } catch (error) {
       toast.error("Error deleting");
