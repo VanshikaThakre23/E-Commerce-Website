@@ -6,11 +6,15 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 
+import { useDispatch } from "react-redux";
+import { login } from "../../features/auth/authSlice";
+
 const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
 
   const handleLogin = async (e) => {
@@ -20,25 +24,27 @@ const Login = () => {
       const res = await axios.post(
         "http://localhost:5000/user/login",
         { email, password },
-        { withCredentials: true },
-      )
+        { withCredentials: true }
 
-      if(res.data.user.role === "admin"){
-        navigate("/admin");
-      }else{
-        navigate("/");
-      }
+        
+      );
+      console.log("API Data:", res.data);
+      console.log("res.data:", res.data)
+console.log("res.data.user:", res.data.user)
+console.log("_id exists?:", res.data.user?._id)
+      dispatch(login(res.data.user || res.data));
 
       toast.success(res.data.message);
+
       navigate("/");
-      window.location.reload()
-      
 
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed")
+      toast.error(error.response?.data?.message || "Login failed");
     }
 
-  }
+    
+
+  };
 
   return (
     <>
@@ -82,7 +88,7 @@ const Login = () => {
             </div>
 
             <button
-              
+
               type='submit'
               className="bg-amber-500 text-white py-2 rounded-md cursor-pointer"
             >

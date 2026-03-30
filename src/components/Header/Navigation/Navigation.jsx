@@ -8,87 +8,84 @@ import CategoryPanel from './CategoryPanel';
 
 const Navigation = () => {
 
-  const navItems = [
-    { name: "Home", path: "/" },
-    {
-      name: "Fashion",
-      submenu: [
-        { name: "Men", path: "/fashion" },
-        { name: "Women", path: "/fashion" },
-        { name: "Kids", path: "/fashion" },
-      ]
-    },
+ const navItems = [
+  { name: "Home", path: "/" },
 
-    {
-      name: "Appliances",
-      submenu: [
-        { name: "Kitchen", path: "/appliances" },
-        { name: "Home", path: "/appliances" },
-      ]
-    },
+  {
+    name: "Fashion",
+    id: "fashion",
+    submenu: [
+      { name: "Men", subId: "men" },
+      { name: "Women", subId: "women" },
+      { name: "Kids", subId: "kids" },
+    ]
+  },
 
-    {
-      name: "Bags",
-      submenu: [
-        { name: "OfficeBag", path: "/bags" },
-        { name: "travelBag", path: "/bags" },
-        { name: "schoolBag", path: "/bags" },
-      ]
+  {
+    name: "Appliances",
+    id: "appliances",
+    submenu: [
+      { name: "Kitchen", subId: "kitchen" },
+      { name: "Home", subId: "home" },
+    ]
+  },
 
-    },
+  {
+    name: "Bags",
+    id: "bags",
+    submenu: [
+      { name: "Office Bag", subId: "office" },
+      { name: "Travel Bag", subId: "travel" },
+      { name: "School Bag", subId: "school" },
+    ]
+  },
 
-    {
-      name: "Footwear",
-      submenu: [
-        { name: "women", path: "/bags" },
-        { name: "men", path: "/bags" },
-        { name: "kids", path: "/bags" },
-      ]
+  {
+    name: "Footwear",
+    id: "footwear",
+    submenu: [
+      { name: "Women", subId: "women" },
+      { name: "Men", subId: "men" },
+      { name: "Kids", subId: "kids" },
+    ]
+  },
 
-    },
+  {
+    name: "Groceries",
+    id: "groceries",
+    submenu: [
+      { name: "Daily Needs", subId: "daily" },
+      { name: "Essentials", subId: "essentials" },
+    ]
+  },
 
-    {
-      name: "Groceries",
-      submenu: [
-        { name: "OfficeBag", path: "/groceries" },
-        { name: "travelBag", path: "/groceries" },
-        { name: "schoolBag", path: "/groceries" },
-      ]
+  {
+    name: "Beauty",
+    id: "beauty",
+    submenu: [
+      { name: "Skincare", subId: "skincare" },
+      { name: "Makeup", subId: "makeup" },
+    ]
+  },
 
-    },
+  {
+    name: "Wellness",
+    id: "wellness",
+    submenu: [
+      { name: "Fitness", subId: "fitness" },
+      { name: "Health", subId: "health" },
+    ]
+  },
 
-    {
-      name: "Beauty",
-      submenu: [
-        { name: "OfficeBag", path: "/groceries" },
-        { name: "travelBag", path: "/groceries" },
-        { name: "schoolBag", path: "/groceries" },
-      ]
-
-    },
-
-    {
-      name: "Wellness",
-      submenu: [
-        { name: "OfficeBag", path: "/groceries" },
-        { name: "travelBag", path: "/groceries" },
-        { name: "schoolBag", path: "/groceries" },
-      ]
-
-    },
-
-    {
-      name: "Jewellary",
-      submenu: [
-        { name: "OfficeBag", path: "/groceries" },
-        { name: "travelBag", path: "/groceries" },
-        { name: "schoolBag", path: "/groceries" },
-      ]
-
-    },
-
-
-  ]
+  {
+    name: "Jewellery",
+    id: "jewellery",
+    submenu: [
+      { name: "Gold", subId: "gold" },
+      { name: "Silver", subId: "silver" },
+    ]
+  }
+];
 
   const [openCategory, setOpenCategory] = useState(false);
 
@@ -113,17 +110,17 @@ const Navigation = () => {
               {navItems.map((item, index) => (
                 <li key={index} className=' relative  group list-none'>
 
-                  <Link to={item.path || "#"} className='link nav-link'>
+                  <Link to={item.path ? item.path : `/category/${item.id}`} className='link nav-link'>
                     {item.name}
                   </Link>
 
                   {/* submenu */}
                   {item.submenu && (
                     <ul className='absolute left-0 top-full hidden group-hover:block bg-white shadow-lg rounded-md min-w-30 py-2 z-50'>
-                      {item.submenu.map((subitem,subindex)=>(
+                      {item.submenu.map((subitem, subindex) => (
                         <li key={subindex}>
-                          <Link to={subitem.path}
-                          className='block px-4 py-2 hover:bg-gray-100 text-black  font-sans'>
+                          <Link to={`/category/${item.id}/${subitem.subId}`}
+                            className='block px-4 py-2 hover:bg-gray-100 text-black  font-sans'>
                             {subitem.name}
                           </Link>
                         </li>
@@ -131,7 +128,7 @@ const Navigation = () => {
                     </ul>
                   )}
                   <ul>
-                    
+
                   </ul>
 
 

@@ -11,15 +11,15 @@ import { Link } from 'react-router-dom';
 import { IoClose } from "react-icons/io5";
 
 const drawerList = [
-  { text: "Home", path: "/" },
-  { text: "Fashion", path: "/fashion" },
-  { text: "Appliances", path: "/appliances" },
-  { text: "Bags", path: "/bags" },
-  { text: "Footwear", path: "/footwear" },
-  { text: "Groceries", path: "/groceries" },
-  { text: "Beauty", path: "/beauty" },
-  { text: "Wellness", path: "/wellness" },
-  { text: "Jewellery", path: "/jewellery" }
+  { text: "Home", id: "/" },
+  { text: "Fashion", id: "fashion" },
+  { text: "Appliances", id: "appliances" },
+  { text: "Bags", id: "bags" },
+  { text: "Footwear", id: "footwear" },
+  { text: "Groceries", id: "groceries" },
+  { text: "Beauty", id: "beauty" },
+  { text: "Wellness", id: "wellness" },
+  { text: "Jewellery", id: "jewellery" }
 ];
 
 const CategoryPanel = ({ open, setOpen }) => {
@@ -65,7 +65,7 @@ const CategoryPanel = ({ open, setOpen }) => {
             <ListItem key={index} disablePadding>
               <ListItemButton
                 component={Link}
-                to={item.path}
+                to={item.id === "/" ? "/" : `/category/${item.id}`}
               >
                 <ListItemText primary={item.text} />
               </ListItemButton>

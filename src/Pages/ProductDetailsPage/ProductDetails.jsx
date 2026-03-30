@@ -5,11 +5,16 @@ import { FaArrowLeft } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Pagination } from "swiper/modules";
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../features/cart/cartSlice';
+import { addToWishlist } from '../../features/wishlist/wishlistSlice';
 
 const ProductDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate(); // Necessary fix for the "Go Back" button
     const [product, setProduct] = useState();
+
+        const dispatch = useDispatch();
 
     useEffect(() => {
         axios.get(`http://localhost:5000/products/${id}`)
@@ -107,10 +112,18 @@ const ProductDetails = () => {
 
                         {/* Action Buttons - High Contrast */}
                         <div className="space-y-4">
-                            <button className="w-full bg-[#f3842a] text-white py-5 text-xs uppercase tracking-[0.2em] font-bold hover:bg-[#bc5806] hover:cursor-pointer transition-colors active:scale-[0.99]">
+                            <button
+                            onClick={()=>{
+                                dispatch(addToCart(product))
+                            }}
+                            className="w-full bg-[#f3842a] text-white py-5 text-xs uppercase tracking-[0.2em] font-bold hover:bg-[#bc5806] hover:cursor-pointer transition-colors active:scale-[0.99]">
                                 Add to  Cart
                             </button>
-                            <button className="w-full bg-transparent border border-zinc-200 text-zinc-900 py-5 text-xs uppercase font-bold hover:border-zinc-900 hover:cursor-pointer transition-colors">
+                            <button
+                             onClick={()=>{
+                                dispatch(addToWishlist(product))
+                            }}
+                            className="w-full bg-transparent border border-zinc-200 text-zinc-900 py-5 text-xs uppercase font-bold hover:border-zinc-900 hover:cursor-pointer transition-colors">
                                 Add to Wishlist
                             </button>
                         </div>

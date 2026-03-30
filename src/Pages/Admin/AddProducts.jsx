@@ -19,7 +19,7 @@ const AddProducts = () => {
     latestSection: false,
   });
 
-  const categories = ["Jewellary", "Appliances", "Bags", "Footwear", "Groceries", "Beauty", "Wellness", "Accessories", "Men", "Women", "Kids"];
+  const categories = ["Jewellary", "Electronics", "Bags", "Footwear", "Beauty", "Wellness", "Men", "Women", "Kids"];
 
   // Handles text and checkboxes
   const handleChange = (e) => {

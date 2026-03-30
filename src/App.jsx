@@ -18,6 +18,8 @@ import AdminSidebar from './Pages/Admin/AdminSidebar.jsx';
 import ViewUsers from './Pages/Admin/ViewUsers.jsx';
 import ProductDetails from './Pages/ProductDetailsPage/ProductDetails.jsx';
 import ManageProducts from './Pages/Admin/ManageProducts.jsx';
+import Categorypage from './Pages/Categorypage/Categorypage.jsx';
+import CheckoutPage from './Pages/CheckoutPage/CheckoutPage.jsx';
 
 
 const App = () => {
@@ -36,8 +38,10 @@ const App = () => {
             <Route path='register' element={<Register/>}/>
             <Route path='/profile' element={<ProfilePage/>}/>
             <Route path='/cart' element={<CartPage/>}/>
+            <Route path='/checkout' element={<CheckoutPage/>}/>
             <Route path='/wishlist' element={<WishlistPage/>}/>
-             <Route path='/products/:id' element={<ProductDetails/>}/>
+            <Route path='/products/:id' element={<ProductDetails/>}/>
+            <Route path='/category/:category/:subcategory' element={<Categorypage/>}/>
 
             {/* admin routes */}
             <Route path='/adminHome' element={<AdminDashboard/>}/>
@@ -45,6 +49,7 @@ const App = () => {
             {/* <Route path='/admin' element={<AdminSidebar/>}/> */}
             <Route path='/viewUsers' element={<ViewUsers/>}/>
             <Route path='/manageProducts' element={<ManageProducts/>}/>
+
 
           </Routes>
         </main>

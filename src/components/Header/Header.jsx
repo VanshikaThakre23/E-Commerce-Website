@@ -14,8 +14,9 @@ import { IoHome } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
-import { useState ,useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 
 
@@ -35,6 +36,13 @@ const Header = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
     const location = useLocation();
+
+    const cartSelector = useSelector((state)=>state.cart.cartItem);
+    console.log(cartSelector.length)
+
+    const wishlistSelector = useSelector((state)=>state.wishlist.wishlistItem);
+    console.log(wishlistSelector.length)
+
 
     useEffect(() => {
 
@@ -69,7 +77,7 @@ const Header = () => {
     return (
 
         <>
-            <header className='bg-white '>
+            <header className='bg-white sticky top-0 z-50'>
                 <div className="top-strip bg-[#] py-2 border-t border-b border-gray-250">
                     <div className="container">
                         <div className="flex items-center justify-between">
@@ -110,7 +118,7 @@ const Header = () => {
 
                         {/* Search */}
                         <div className="w-2/4">
-                            <SearchBar />
+                            {/* <SearchBar /> */}
                         </div>
 
                         {/* Right Section */}
@@ -121,8 +129,8 @@ const Header = () => {
                                     {loggedIn ? (
                                         <>
 
-                                        {/* iska mtlb hai agr ye true hai location.pathname !== "/" to && ke baad ka code chalega mtlb home route nhi hai to uska icon dikhao  */}
-                                          {
+                                            {/* iska mtlb hai agr ye true hai location.pathname !== "/" to && ke baad ka code chalega mtlb home route nhi hai to uska icon dikhao  */}
+                                            {
                                                 location.pathname !== "/" && (
                                                     <Tooltip title="Home">
                                                         <IconButton aria-label="home">
@@ -148,7 +156,7 @@ const Header = () => {
 
                                                                     <MdAccountCircle />
 
-                                                                </StyledBadge>
+                                                                </StyledBadge >
                                                             </Link>
                                                         </IconButton>
                                                     </Tooltip>
@@ -160,7 +168,7 @@ const Header = () => {
                                                     <Tooltip title="Wishlist" >
                                                         <IconButton aria-label="wishlist">
                                                             <Link to={"/wishlist"}>
-                                                                <StyledBadge badgeContent={4}>
+                                                              <StyledBadge badgeContent={wishlistSelector.length ? wishlistSelector.length:0} >
 
                                                                     <FaRegHeart />
                                                                 </StyledBadge>
@@ -178,7 +186,7 @@ const Header = () => {
                                                         <IconButton aria-label="cart">
                                                             <Link to={"/cart"}>
 
-                                                                <StyledBadge  >
+                                                                <StyledBadge badgeContent={cartSelector.length ? cartSelector.length:0} >
                                                                     <ShoppingCartIcon />
                                                                 </StyledBadge>
                                                             </Link>

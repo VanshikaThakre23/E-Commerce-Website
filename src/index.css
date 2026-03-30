@@ -59,6 +59,14 @@ font-weight: 650;
 .mySwiper{
   overflow: inherit!important;
 }
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE */
+  scrollbar-width: none;     /* Firefox */
+}
 
 .mySwiper .swiper-button-prev,
 .mySwiper .swiper-button-next{
@@ -161,4 +169,10 @@ opacity:0;
 .productCard:hover .swiper-button-next,
 .productCard:hover .swiper-button-prev{
 opacity:1;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;   /* always visible */
+  height: auto;
 }

@@ -103,7 +103,7 @@ const Sidebar = ({selectedCategory , setSelectedCategory}) => {
                     </div>
 
                     {/* Rating Filter */}
-                    <div>
+                    {/* <div>
                         <h3 className="font-semibold mb-3 text-md">RATING</h3>
 
                         {[1,2,3,4].map((star) => (
@@ -120,7 +120,7 @@ const Sidebar = ({selectedCategory , setSelectedCategory}) => {
                                 <span>{star} ★ & above</span>
                             </div>
                         ))}
-                    </div>
+                    </div> */}
 
                     {/* Sort By */}
                     <div>

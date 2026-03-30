@@ -1,49 +1,60 @@
-import React, { useEffect, useState } from 'react'
-import HomeSlider from '../../components/HomeSlider/HomeSlider'
-import HomeCategorySlider from '../../components/HomeCategorySlider/HomeCategorySlider'
+import React, { useEffect, useState } from "react";
 
-import Box from '@mui/material/Box';
-import Tabs, { tabsClasses } from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart } from "../../features/cart/cartSlice";
+import { addToWishlist } from "../../features/wishlist/wishlistSlice";
 
-import Navigation from '../../components/Header/Navigation/Navigation';
-import ProductItem from '../../components/ProductItem/ProductItem';
-import productItemList from '../../data/products';
-import Banner from '../../components/Banner/Banner';
-import ReusableSlider from '../../components/resusableSlider/reusableSlider';
-import ProductCard from '../../components/ProductCard/ProductCard';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+import HomeCategorySlider from "../../components/HomeCategorySlider/HomeCategorySlider";
+import Navigation from "../../components/Header/Navigation/Navigation";
+import ProductItem from "../../components/ProductItem/ProductItem";
+import Banner from "../../components/Banner/Banner";
+import ReusableSlider from "../../components/resusableSlider/reusableSlider";
+import ProductCard from "../../components/ProductCard/ProductCard";
+import Features from "../../components/Features/Features";
+import SliderType2 from "../../components/SliderType2/SliderType2";
+
+import Box from "@mui/material/Box";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+
 import testimonials from "../../data/testimonials";
-import Features from '../../components/Features/Features';
-import SliderType2 from '../../components/SliderType2/SliderType2';
 
-import { FaTruck, FaRedo, FaLock, FaGift, FaHeadset, FaShoppingCart } from "react-icons/fa";
+import {
+  FaTruck,
+  FaRedo,
+  FaLock,
+  FaGift,
+  FaHeadset,
+  FaShoppingCart,
+} from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa6";
-import { IoGitCompare } from "react-icons/io5";
-
-import axios from 'axios';
 
 const HomePage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
 
+  const [products, setProducts] = useState([]);
+  const [popularProducts, setPopularProducts] = useState([]);
+  const [latestProducts, setLatestProducts] = useState([]);
+  const [value, setValue] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("Footwear");
 
   const tabsList = [
     { id: 1, title: "Footwear" },
-    { id: 2, title: "Appliances" },
+    { id: 2, title: "Electronics" },
     { id: 3, title: "Bags" },
     { id: 4, title: "Jewellary" },
-    { id: 5, title: "Groceries" },
-    { id: 6, title: "Beauty" },
-    { id: 7, title: "Men" },
-    { id: 8, title: "Women" },
-    { id: 9, title: "Kids" },
-    
-
-  ]
-
-  const latestActions = [
-    { title: "Wishlist", Icon: FaRegHeart },
-    { title: "Compare", Icon: IoGitCompare },
-    { title: "Add to Cart", Icon: FaShoppingCart },
-  ]
+    { id: 5, title: "Beauty" },
+    { id: 6, title: "Men" },
+    { id: 7, title: "Women" },
+    { id: 8, title: "Kids" },
+    { id: 9, title: "Wellness" },
+  ];
 
   const featuresData = [
     { icon: <FaTruck size={40} />, title: "Free Shipping", description: "For all Orders Over $100" },
@@ -53,129 +64,118 @@ const HomePage = () => {
     { icon: <FaHeadset size={35} />, title: "Support 24/7", description: "Contact us Anytime" },
   ];
 
+  
+console.log(user);
 
-  const [products, setProducts] = useState([]);
-  const [popularProducts, setPopularProducts] = useState([]);
-  const [latestProducts, setLatestProducts] = useState([]);
-  const [value, setValue] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState("Jewellary");
+  const sharedActions = [
+    {
+      title: "Wishlist",
+      Icon: FaRegHeart,
+      onClick: (item) =>
+        handleAuthAction((data) => dispatch(addToWishlist(data)), item),
+    },
+    {
+      title: "Add to Cart",
+      Icon: FaShoppingCart,
+      onClick: (item) =>
+        handleAuthAction((data) => dispatch(addToCart(data)), item),
+    },
+  ];
 
   useEffect(() => {
-    axios.get("http://localhost:5000/products")
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.log(err))
-  }, [])
+    const fetchData = async () => {
+      try {
+        const [all, popular, latest] = await Promise.all([
+          axios.get("http://localhost:5000/products"),
+          axios.get("http://localhost:5000/products/popular"),
+          axios.get("http://localhost:5000/products/latest"),
+        ]);
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/products/popular")
-      .then((res) => setPopularProducts(res.data));
+        setProducts(all.data);
+        setPopularProducts(popular.data);
+        setLatestProducts(latest.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-    axios.get("http://localhost:5000/products/latest")
-      .then((res) => setLatestProducts(res.data));
-
+    fetchData();
   }, []);
-
-  console.log(products);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setSelectedCategory(tabsList[newValue].title);
-  }
+  };
 
-const selectedCategoryProducts = (popularProducts || []).filter((item) =>
-  item.category?.map(c => c.trim().toLowerCase())
-  .includes(selectedCategory.trim().toLowerCase())
-);
+  const selectedCategoryProducts = (popularProducts || []).filter((item) => {
+    if (!item.category) return false;
 
-console.log("popularProducts", popularProducts);
-console.log("selectedCategory", selectedCategory);
-console.log("filtered", selectedCategoryProducts);
-  
+    const categories = Array.isArray(item.category)
+      ? item.category
+      : [item.category];
+
+    return categories
+      .map((c) => c.trim().toLowerCase())
+      .includes(selectedCategory.trim().toLowerCase());
+  });
+
   return (
     <>
       <Navigation />
-
-
-      {/* <section className='py-6'>
-        <div className="flex items-center container">
-          <div className="leftpart w-[65%]">
-            <SliderType2/>
-          </div>
-        </div>
-      </section> */}
-
-
       <SliderType2 />
-
-
-
       <HomeCategorySlider />
       <Banner />
 
-      <div className='bg-white py-5 '>
+      <div className="bg-white py-5">
         <div className="container mx-auto px-4">
 
-          {/* -------------popular Product vala sections */}
+          {/* Popular Section */}
           <div className="flex items-center justify-between gap-6 mt-10">
-            <div className="leftSec w-[30%]">
-              <h3 className='text-[22px] font-semibold'> Popular Products</h3>
-              <p className='text-[12px] font-semibold'>Do not miss the current offers until the end of March</p>
-
+            <div className="w-[30%]">
+              <h3 className="text-[22px] font-semibold">Popular Products</h3>
+              <p className="text-[12px] font-semibold">
+                Do not miss the current offers until the end of March
+              </p>
             </div>
 
-            <div className="rightSec w-[70%] bg-amber-200">
-
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  width: "100%",
-                  bgcolor: 'background.paper',
-                }}
-              >
+            <div className="w-[70%]">
+              <Box sx={{ flexGrow: 1, width: "100%", bgcolor: "background.paper" }}>
                 <Tabs
-
                   value={value}
                   onChange={handleChange}
                   variant="scrollable"
                   scrollButtons
-                  aria-label="visible arrows tabs example"
-
                 >
-                  {
-                    tabsList.map((item) => (
-                      <Tab key={item.id} label={item.title} />
-                    ))
-                  }
-
+                  {tabsList.map((item) => (
+                    <Tab key={item.id} label={item.title} />
+                  ))}
                 </Tabs>
               </Box>
-
             </div>
-
-
           </div>
 
           <ProductItem items={selectedCategoryProducts} />
 
-
-
-          {/* banner image single vali black bg vali*/}
-          <div className="banner mt-5  border-2 rounded-2xl overflow-hidden group">
-            <img src="/images/bannerimg1.png" alt="gwrfwefwef" className='transition-all duration-190 group-hover:scale-110 ' />
+          {/* Banner */}
+          <div className="mt-5 border-2 rounded-2xl overflow-hidden group">
+            <img
+              src="/images/bannerimg1.png"
+              alt="banner"
+              className="transition-all duration-200 group-hover:scale-110"
+            />
           </div>
 
-          {/* ----------------Latest Product Section------------------ */}
+          {/* Latest Products */}
           <ReusableSlider
             title="Latest Products"
             data={latestProducts}
-            renderItem={(item) =>
-              <ProductCard item={item} actions={latestActions} />
-            }
+            renderItem={(item) => (
+              <ProductCard item={item } />
+            )}
             slidesPerView={5}
           />
 
-          {/* -----------Testimonial Section- logo ke review dikhenge idhr -------------------- */}
-          {/* isme customer ke photo and their feedback add krne hai  */}
+          {/* Testimonials */}
           <ReusableSlider
             title="See What our Customer Says"
             data={testimonials}
@@ -186,7 +186,9 @@ console.log("filtered", selectedCategoryProducts);
                   alt={item.name}
                   className="w-30 h-30 rounded-full mx-auto mb-4"
                 />
-                <p className="text-sm text-gray-600 mb-2">"{item.feedback}"</p>
+                <p className="text-sm text-gray-600 mb-2">
+                  "{item.feedback}"
+                </p>
                 <h4 className="font-semibold">{item.name}</h4>
               </div>
             )}
@@ -195,13 +197,11 @@ console.log("filtered", selectedCategoryProducts);
         </div>
       </div>
 
-
-      <div className=" mx-auto mt-10">
+      <div className="mx-auto mt-10">
         <Features features={featuresData} />
-
       </div>
     </>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

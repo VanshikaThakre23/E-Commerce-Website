@@ -11,7 +11,7 @@ const ProductListing = () => {
 
 
     useEffect(() => {
-        axios.get("http://localhost:5000/products/popular")
+        axios.get("http://localhost:5000/products")
             .then((res => setProducts(res.data)));
     }, []);
 
@@ -28,7 +28,7 @@ const ProductListing = () => {
             <div className="">
 
                 <div className="container ">
-                    <div className="flex gap-4 mt-3 bg-[#fcf9f9] px-4">
+                    <div className="flex gap-4 mt-3 bg-[#fcf9f9] px-2">
                         <div className="sidebarWrapper ">
                             <Sidebar
                                 selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
@@ -36,7 +36,7 @@ const ProductListing = () => {
 
                        
 
-                        <div className="gridWrapper w-full">
+                        <div className="gridWrapper w-full h-screen overflow-y-auto no-scrollbar">
                             <ProductItem items={filteredProducts} />
                         </div>
 
