@@ -26,7 +26,6 @@ const ProductListing = () => {
     return (
         <>
             <div className="">
-
                 <div className="container ">
                     <div className="flex gap-4 mt-3 bg-[#fcf9f9] px-2">
                         <div className="sidebarWrapper ">

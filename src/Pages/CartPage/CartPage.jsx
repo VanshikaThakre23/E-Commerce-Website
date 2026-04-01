@@ -28,7 +28,7 @@ const CartPage = () => {
     }
     dispatch(removeFromCart(id))
     swal("Item removed",{
-      icon:success,
+      icon:"success",
     })
   }
 

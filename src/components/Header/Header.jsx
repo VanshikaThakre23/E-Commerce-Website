@@ -16,8 +16,9 @@ import { MdAccountCircle } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { setCart } from '../../features/cart/cartSlice';
 
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -33,46 +34,39 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const Header = () => {
 
-    const [loggedIn, setLoggedIn] = useState(false);
-
+    const dispatch = useDispatch();
     const location = useLocation();
 
-    const cartSelector = useSelector((state)=>state.cart.cartItem);
+    const user = useSelector((state) => state.auth.user); // ✅ MAIN FIX
+    console.log(user);
+
+    const cartSelector = useSelector((state) => state.cart.cartItem);
     console.log(cartSelector.length)
 
-    const wishlistSelector = useSelector((state)=>state.wishlist.wishlistItem);
+    const wishlistSelector = useSelector((state) => state.wishlist.wishlistItem);
     console.log(wishlistSelector.length)
 
 
-    useEffect(() => {
-
-        const checkLogin = async () => {
-            try {
-                const res = await axios.get("http://localhost:5000/user/me", {
-                    withCredentials: true
-                })
-                if (res.data.user) {
-                    setLoggedIn(true);
-                }
-
-            } catch (error) {
-                if (error.response?.status === 401) {
-                    setLoggedIn(false);
-                } else {
-                    console.log(error);
-                }
-            }
+  useEffect(() => {
+    const fetchCart = async () => {
+        try {
+            const res = await axios.get("http://localhost:5000/cart", {
+                withCredentials: true
+            });
+            dispatch(setCart(res.data));
+        } catch (err) {
+            console.log(err);
         }
-        checkLogin();
-    }, []);
+    };
 
-    // const handleLogout = async () => {
-    //     await axios.get("http://localhost:5000/user/logout", {
-    //         withCredentials: true,
-    //     });
-    //     setLoggedIn(false);
-    // };
+   if (user) {
+        fetchCart();
+    } else {
+        dispatch(setCart([]));
+    }
+}, [user]);
 
+    
 
     return (
 
@@ -126,7 +120,7 @@ const Header = () => {
                             <ul className='flex items-center w-full justify-end gap-2'>
 
                                 <li className='list-none text-[16px] font-medium'>
-                                    {loggedIn ? (
+                                    {user ? (
                                         <>
 
                                             {/* iska mtlb hai agr ye true hai location.pathname !== "/" to && ke baad ka code chalega mtlb home route nhi hai to uska icon dikhao  */}
@@ -168,7 +162,7 @@ const Header = () => {
                                                     <Tooltip title="Wishlist" >
                                                         <IconButton aria-label="wishlist">
                                                             <Link to={"/wishlist"}>
-                                                              <StyledBadge badgeContent={wishlistSelector.length ? wishlistSelector.length:0} >
+                                                                <StyledBadge badgeContent={wishlistSelector.length ? wishlistSelector.length : 0} >
 
                                                                     <FaRegHeart />
                                                                 </StyledBadge>
@@ -186,7 +180,7 @@ const Header = () => {
                                                         <IconButton aria-label="cart">
                                                             <Link to={"/cart"}>
 
-                                                                <StyledBadge badgeContent={cartSelector.length ? cartSelector.length:0} >
+                                                                <StyledBadge badgeContent={cartSelector.length ? cartSelector.length : 0} >
                                                                     <ShoppingCartIcon />
                                                                 </StyledBadge>
                                                             </Link>
@@ -196,24 +190,7 @@ const Header = () => {
                                                 )
                                             }
 
-
-
-                                            {/* <Tooltip title="Logout">
-                                                <IconButton aria-label="Logout">
-                                                    <StyledBadge  >
-                                                        <Link to={"/logout"}>
-                                                            <LogoutOutlinedIcon
- />
-                                                        </Link>
-                                                    </StyledBadge>
-                                                </IconButton>
-                                            </Tooltip> */}
                                         </>
-
-
-                                        // <button onClick={handleLogout} className='authBtn transition-all'>Logout</button>
-
-
 
                                     ) : (
                                         <>

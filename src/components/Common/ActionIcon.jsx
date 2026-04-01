@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { addToCart, removeFromCart } from "../../features/cart/cartSlice";
 import {addToWishlist,removeFromWishlist,} from "../../features/wishlist/wishlistSlice";
 import { toast } from "react-toastify";
+import { addToCartAPI } from "../../features/cart/cartActions";
 
 const ActionIcon = ({ type, item }) => {
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ const ActionIcon = ({ type, item }) => {
           dispatch(removeFromCart(item._id));
           toast.info("Removed from Cart");
         } else {
-          dispatch(addToCart(item));
+          dispatch(addToCartAPI(item));
           toast.success("Added to Cart");
         }
       });

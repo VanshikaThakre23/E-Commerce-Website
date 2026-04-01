@@ -24,9 +24,7 @@ const WishlistPage = () => {
       return;
     }else{
     dispatch(removeFromWishlist(id))
-    swal("Item removed",{
-      icon:"success",
-    })
+    
       toast.success("Item removed successfully!")
 
   }

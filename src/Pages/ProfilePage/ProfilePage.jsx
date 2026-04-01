@@ -4,9 +4,14 @@ import { useNavigate } from "react-router-dom";
 import {MapPin,LogOut,Plus,ChevronRight,Phone,Edit3,Trash2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 
+import { useDispatch } from "react-redux";
+import { logout } from "../../features/auth/authSlice";
+import { setCart } from "../../features/cart/cartSlice";
+
 const ProfilePage = () => {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // ---------- STATE ----------
   const [user, setUser] = useState(null);
@@ -162,6 +167,10 @@ const ProfilePage = () => {
         { withCredentials: true }
       );
 
+      dispatch(logout());
+  
+       dispatch(setCart([])); 
+    
       navigate("/login");
 
     } catch (error) {
