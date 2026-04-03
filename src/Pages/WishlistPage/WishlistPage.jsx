@@ -11,6 +11,12 @@ const WishlistPage = () => {
   const dispatch = useDispatch();
   const wishlist = useSelector((state) => state.wishlist.wishlistItem);
 
+  const handleAddtoCart = async (item)=>{
+    dispatch(addToCart(item));
+
+    toast.success("product added to cart");
+  }
+
     const handleDelete = async(id)=>{
     const willDelete = await swal({
       title: "Are you sure?",
@@ -86,9 +92,9 @@ const WishlistPage = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() =>
-                          dispatch(addToCart(item))
+                          handleAddtoCart(item)
                         }
-                        className="flex-1 flex items-center justify-center gap-2 bg-gray-900 text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition">
+                        className="flex-1 flex items-center justify-center gap-2 bg-[#f97502] text-white py-2 rounded-lg text-sm font-medium hover:bg-gray-600 transition">
                         <FiShoppingCart size={16} /> Add to Cart
                       </button>
                       <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-600">

@@ -1,12 +1,15 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {MapPin,LogOut,Plus,ChevronRight,Phone,Edit3,Trash2 } from "lucide-react";
+import { MapPin, LogOut, Plus, ChevronRight, Phone, Edit3, Trash2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
 import { setCart } from "../../features/cart/cartSlice";
+
+import swal from "sweetalert";
+import { setWishlist } from "../../features/wishlist/wishlistSlice";
 
 const ProfilePage = () => {
 
@@ -161,17 +164,34 @@ const ProfilePage = () => {
   const logoutUser = async () => {
 
     try {
+      const userLogout = await swal({
+        title: "Are you sure?",
+        text: "Are you sure you want to logout ?",
+        icon: "warning",
+        dangerMode: true,
+        buttons:
+        {
+          cancel: "No",
+          confirm: "Yes",
+        },
+      });
 
-      await axios.get(
-        "http://localhost:5000/user/logout",
-        { withCredentials: true }
-      );
+      if (!userLogout) {
+        return
+      }
+      else {
+        await axios.get(
+          "http://localhost:5000/user/logout",
+          { withCredentials: true }
+        );
 
-      dispatch(logout());
-  
-       dispatch(setCart([])); 
-    
-      navigate("/login");
+        dispatch(logout());
+
+        dispatch(setCart([]));
+        dispatch(setWishlist([]));
+
+        navigate("/login");
+      }
 
     } catch (error) {
 
@@ -217,8 +237,8 @@ const ProfilePage = () => {
                 resetForm();
               }}
               className={`w-full flex justify-between p-3 rounded-lg ${activeSection === id
-                  ? "bg-gray-300 text-black"
-                  : "hover:bg-gray-100"
+                ? "bg-gray-300 text-black"
+                : "hover:bg-gray-100"
                 }`}
             >
               {id}
@@ -227,14 +247,21 @@ const ProfilePage = () => {
 
           ))}
 
+          <button
+            onClick={logoutUser}
+            className="mt-10 flex items-center gap-3 text-red-500"
+          >
+            <LogOut size={18} /> Logout
+          </button>
+
         </nav>
 
-        <button
+        {/* <button
           onClick={logoutUser}
           className="mt-10 flex items-center gap-3 text-red-500"
         >
           <LogOut size={18} /> Logout
-        </button>
+        </button> */}
 
       </aside>
 

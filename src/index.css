@@ -2,35 +2,38 @@
 
 
 
-body{
-    font-family: "Montserrat", sans-serif;
+body {
+  font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   background-color: #f5f0f0;
   overflow-x: hidden;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
   background: rgb(210, 225, 199);
-  border-radius:80px;
- 
-}
-::-webkit-scrollbar-track{
-  background:rgb(87, 94, 56);
+  border-radius: 80px;
+
 }
 
-.container{
+::-webkit-scrollbar-track {
+  background: rgb(87, 94, 56);
+}
+
+.container {
   width: 95%;
   margin: auto;
-  
+
 }
+
 /* #036092 -logo ka blue color */
 
-.universalBtn{
-  background:#f97502!important;
+.universalBtn {
+  background: #f97502 !important;
   color: #fff;
   width: 8rem;
   height: 2.4rem;
@@ -38,8 +41,9 @@ body{
   font-size: 0.8rem;
   cursor: pointer;
 }
-.authBtn{
-  background:#f97502  !important;
+
+.homeBtn {
+  background: #105981 !important;
   color: #fff;
   width: 5rem;
   height: 2.4rem;
@@ -47,51 +51,69 @@ body{
   border-radius: 4px;
 }
 
-.link:hover{
-color: #036092 ;
-font-weight: 650;
+.authBtn {
+  background: #105981 !important;
+  color: #fff;
+  width: 5rem;
+  height: 2.4rem;
+  padding: 4px;
+  border-radius: 4px;
 }
-.nav-link{
+
+.authBtn:hover {
+  background-color: #033651 !important;
+}
+
+.link:hover {
+  color: #036092;
+  font-weight: 650;
+}
+
+.nav-link {
   font-weight: 600;
   color: #000;
   transition: 0.1s ease-in-out;
 }
-.mySwiper{
-  overflow: inherit!important;
+
+.mySwiper {
+  overflow: inherit !important;
 }
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;
+  /* IE */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .mySwiper .swiper-button-prev,
-.mySwiper .swiper-button-next{
+.mySwiper .swiper-button-next {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  background: #fff !important; 
+  background: #fff !important;
   border-radius: 100%;
   width: 40px;
   height: 40px;
-  min-width:40px;
+  min-width: 40px;
   color: #000;
   padding: 0.5em;
   box-shadow: 0 1px 1px #0000001f !important;
 }
 
-.mySwiper  .swiper-button-prev::after,
-.mySwiper  .swiper-button-next::after{
-  font-size: 22px!important;
+.mySwiper .swiper-button-prev::after,
+.mySwiper .swiper-button-next::after {
+  font-size: 22px !important;
   font-weight: 500 !important;
   color: #000 !important;
 }
 
 
-.homecatslider{
+.homecatslider {
   overflow-x: hidden;
   width: 95%;
   margin: auto;
@@ -107,44 +129,51 @@ font-weight: 650;
   background: #ccc;
   opacity: 1;
 }
-.mySwiper .swiper-pagination-bullet:hover{
-background: rgb(255, 115, 0) ;
+
+.mySwiper .swiper-pagination-bullet:hover {
+  background: rgb(255, 115, 0);
 }
+
 .mySwiper .swiper-pagination-bullet-active {
   background: rgb(255, 115, 0);
 }
 
 
 
-.MuiTabs-indicator{
+.MuiTabs-indicator {
   background-color: #ff5252 !important;
 }
-.MuiTab-textColorPrimary.Mui-selected{
+
+.MuiTab-textColorPrimary.Mui-selected {
   color: #ff5252 !important;
 }
 
- 
+
 /* Container for the navigation buttons */
 .sliderType2 .swiper-button-next,
 .sliderType2 .swiper-button-prev {
   background-color: white;
-  width: 30px;  /* Size of the white circle/box */
+  width: 30px;
+  /* Size of the white circle/box */
   height: 30px;
-  border-radius: 50%; /* Makes it rounded */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important; /* Optional: adds a little depth */
-   display: flex;
+  border-radius: 50%;
+  /* Makes it rounded */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+  /* Optional: adds a little depth */
+  display: flex;
   align-items: center;
   justify-content: center;
   padding: 6px !important;
   color: #000;
-  font-weight:bold!important;
+  font-weight: bold !important;
 }
 
 /* Styling the icon itself (< and >) */
 .sliderType2 .swiper-button-next::after,
 .sliderType2 .swiper-button-prev::after {
   color: rgb(9, 9, 9);
-  font-size: 10px; /* Your requested size */
+  font-size: 10px;
+  /* Your requested size */
   font-weight: bold;
 }
 
@@ -160,19 +189,20 @@ background: rgb(255, 115, 0) ;
 }
 
 .productSwiper .swiper-button-next,
-.productSwiper .swiper-button-prev{
+.productSwiper .swiper-button-prev {
   /* transform: scale(0.5);    */
-opacity:0;
+  opacity: 0;
   width: 0.9rem;
 }
 
 .productCard:hover .swiper-button-next,
-.productCard:hover .swiper-button-prev{
-opacity:1;
+.productCard:hover .swiper-button-prev {
+  opacity: 1;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  opacity: 1;   /* always visible */
+  opacity: 1;
+  /* always visible */
   height: auto;
 }

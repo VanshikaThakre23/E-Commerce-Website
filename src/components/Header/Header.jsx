@@ -47,26 +47,26 @@ const Header = () => {
     console.log(wishlistSelector.length)
 
 
-  useEffect(() => {
-    const fetchCart = async () => {
-        try {
-            const res = await axios.get("http://localhost:5000/cart", {
-                withCredentials: true
-            });
-            dispatch(setCart(res.data));
-        } catch (err) {
-            console.log(err);
+    useEffect(() => {
+        const fetchCart = async () => {
+            try {
+                const res = await axios.get("http://localhost:5000/cart", {
+                    withCredentials: true
+                });
+                dispatch(setCart(res.data));
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        if (user) {
+            fetchCart();
+        } else {
+            dispatch(setCart([]));
         }
-    };
+    }, [user]);
 
-   if (user) {
-        fetchCart();
-    } else {
-        dispatch(setCart([]));
-    }
-}, [user]);
 
-    
 
     return (
 
@@ -194,39 +194,19 @@ const Header = () => {
 
                                     ) : (
                                         <>
-                                            <Link to={"/login"} className='authBtn mr-4'>Login</Link>
-                                            <Link to={"/register"} className='authBtn'>Register</Link>
+                                            <div className="flex justify-between items-center text-center">
+                                                <Link to={"/"} className='homeBtn mr-4 ml-2'>Home</Link>
+
+                                                <Link to={"/login"} className='authBtn mr-4 ml-2'>Login</Link>
+                                                <Link to={"/register"} className='authBtn'>Register</Link>
+                                            </div>
                                         </>
 
 
                                     )}
                                 </li>
 
-                                {/* <Tooltip title="Profile">
-                                    <IconButton aria-label="profile">
-                                        <StyledBadge  >
-                                            <Link to={"/profile"}>
-                                                <MdAccountCircle />
-                                            </Link>
-                                        </StyledBadge>
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Wishlist" >
-                                    <IconButton aria-label="wishlist">
-                                        <StyledBadge badgeContent={4}>
-                                            <FaRegHeart />
-                                        </StyledBadge>
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip title="Cart">
-                                    <IconButton aria-label="cart">
-                                        <StyledBadge  >
-                                            <Link to={"/cart"}>
-                                                <ShoppingCartIcon />
-                                            </Link>
-                                        </StyledBadge>
-                                    </IconButton>
-                                </Tooltip> */}
+
                             </ul>
 
                         </div>
@@ -236,7 +216,7 @@ const Header = () => {
 
 
 
-            </header>
+            </header >
 
 
 

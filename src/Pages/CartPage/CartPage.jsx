@@ -20,16 +20,19 @@ const CartPage = () => {
       text: "Are you sure that you want to remove thhis item?",
       icon: "warning",
       dangerMode: true,
-      buttons:true,
+       buttons:
+        {
+          cancel: "No",
+          confirm: "Yes",
+        },
     });
 
     if (!willDelete) {
       return;
-    }
+    }else{
     dispatch(removeFromCart(id))
-    swal("Item removed",{
-      icon:"success",
-    })
+      toast.success("Item removed successfully")
+  }
   }
 
   return (

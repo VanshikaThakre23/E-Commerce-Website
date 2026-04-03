@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 
 import { useDispatch } from "react-redux";
 import { login } from "../../features/auth/authSlice";
+import { setCart } from '../../features/cart/cartSlice';
+import { setWishlist } from '../../features/wishlist/wishlistSlice';
 
 const Login = () => {
 
@@ -26,13 +28,25 @@ const Login = () => {
         { email, password },
         { withCredentials: true }
 
-        
+
       );
       console.log("API Data:", res.data);
       console.log("res.data:", res.data)
-console.log("res.data.user:", res.data.user)
-console.log("_id exists?:", res.data.user?._id)
-      dispatch(login(res.data.user || res.data));
+      console.log("res.data.user:", res.data.user)
+      console.log("_id exists?:", res.data.user?._id);
+
+      const user = res.data.user || res.data;
+
+      dispatch(login(user));
+
+      const userId = user?.email;
+
+      const userCart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
+
+      const userWishlist = JSON.parse(localStorage.getItem(`wishlist_${userId}`)) || []
+
+      dispatch(setCart(userCart));
+      dispatch(setWishlist(userWishlist));
 
       toast.success(res.data.message);
 
@@ -42,7 +56,7 @@ console.log("_id exists?:", res.data.user?._id)
       toast.error(error.response?.data?.message || "Login failed");
     }
 
-    
+
 
   };
 
