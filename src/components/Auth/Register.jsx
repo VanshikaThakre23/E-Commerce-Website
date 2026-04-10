@@ -15,26 +15,37 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
 
-        try {
-            const res = await axios.post(
-                "http://localhost:5000/user/register",
-                { name, email, password },
-                { withCredentials: true },
-            )
+        const BASE_URL =
+            window.location.hostname === "localhost"
+                ? "http://localhost:5000"
+                : "https://megakart-backend.onrender.com";
 
-            toast.success(res.data.message);
-         
+        const handleRegister = async (e) => {
+            e.preventDefault();
 
-            navigate("/login")
+            try {
+                const res = await axios.post(
+                    `${BASE_URL}/user/register`,
+                    { name, email, password },
+                    { withCredentials: true }
+                );
 
-            setName("");
-            setEmail("");
-            setPassword("");
+                toast.success(res.data.message || "Registered Successfully");
 
+                setName("");
+                setEmail("");
+                setPassword("");
 
-        } catch (error) {
-            toast.error(error?.response?.data?.message|| "Registration Failed");
-        }
+                navigate("/login");
+
+            } catch (error) {
+                console.error(error);
+
+                toast.error(
+                    error?.response?.data?.message || "Registration Failed"
+                );
+            }
+        };
     }
 
 

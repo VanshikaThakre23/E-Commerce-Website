@@ -22,14 +22,18 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    const BASE_URL =
+      window.location.hostname === "localhost"
+        ? "http://localhost:5000"
+        : "https://megakart-backend.onrender.com";
+
     try {
       const res = await axios.post(
-        "http://localhost:5000/user/login",
+        `${BASE_URL}/user/login`,
         { email, password },
         { withCredentials: true }
-
-
       );
+      
       console.log("API Data:", res.data);
       console.log("res.data:", res.data)
       console.log("res.data.user:", res.data.user)
@@ -50,12 +54,12 @@ const Login = () => {
 
       toast.success(res.data.message);
 
-      console.log("jnbljk;",user)
+      console.log("jnbljk;", user)
 
-      if(user.role==="admin"){
+      if (user.role === "admin") {
         navigate("/adminHome");
-      }else{
-      navigate("/");
+      } else {
+        navigate("/");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
