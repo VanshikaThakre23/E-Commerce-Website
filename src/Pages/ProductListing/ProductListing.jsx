@@ -8,10 +8,14 @@ const ProductListing = () => {
     const [products, setProducts] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("All");
 
+    const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
 
 
     useEffect(() => {
-        axios.get("http://localhost:5000/products")
+        axios.get(`${BASE_URL}/products`)
             .then((res => setProducts(res.data)));
     }, []);
 

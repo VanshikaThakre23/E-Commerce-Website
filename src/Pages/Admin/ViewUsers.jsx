@@ -4,10 +4,16 @@ import AdminSidebar from './AdminSidebar';
 const ViewUsers = () => {
     const [seeUsers, setSeeUsers] = useState([]);
 
+    const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+    
+
     useEffect(() => {
         const allUsers = async () => {
             try {
-                const res = await fetch("http://localhost:5000/user/viewUser");
+                const res = await fetch(`${BASE_URL}/user/viewUser`);
                 const data = await res.json();
                 setSeeUsers(data.users || []);
             } catch (error) {

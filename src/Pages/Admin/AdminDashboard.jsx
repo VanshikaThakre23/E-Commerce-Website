@@ -8,9 +8,15 @@ const AdminDashboard = () => {
 
   // const location = useLocation();
 
+  const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+
+
   useEffect(() => {
-    const userCount = async () => {
-      const res = await fetch("http://localhost:5000/user/totalUser");
+    const userCount = async () => {`${BASE_URL}/user/totalUser`
+      const res = await fetch(`${BASE_URL}/user/totalUser`);
       const data = await res.json();
       setTotalUser(data.totalUser);
     };
@@ -20,7 +26,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const productCount = async () => {
-      const res = await fetch("http://localhost:5000/products/totalProducts");
+      const res = await fetch(`${BASE_URL}/products/totalProducts`);
       const data = await res.json();
       setTotalProducts(data.totalProducts);
     };

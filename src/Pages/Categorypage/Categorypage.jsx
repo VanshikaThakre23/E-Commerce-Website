@@ -9,10 +9,15 @@ const Categorypage = () => {
   const [products, setProducts] = useState([]);
   const [filtered, setFiltered] = useState([]);
 
+  const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+
   // fetch products
   useEffect(() => {
     const getProducts = async () => {
-      const res = await axios.get("http://localhost:5000/products");
+      const res = await axios.get(`${BASE_URL}/products`);
       setProducts(res.data);
     };
 

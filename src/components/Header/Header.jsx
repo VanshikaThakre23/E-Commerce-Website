@@ -19,7 +19,6 @@ import axios from 'axios';
 import ManageAccountsSharpIcon from '@mui/icons-material/ManageAccountsSharp';
 
 
-
 import { useSelector, useDispatch } from 'react-redux';
 import { setCart } from '../../features/cart/cartSlice';
 
@@ -50,10 +49,17 @@ const Header = () => {
     console.log(wishlistSelector.length)
 
 
+    
+  const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+
+
     useEffect(() => {
         const fetchCart = async () => {
             try {
-                const res = await axios.get("http://localhost:5000/cart", {
+                const res = await axios.get(`${BASE_URL}/products`, {
                     withCredentials: true
                 });
                 dispatch(setCart(res.data));

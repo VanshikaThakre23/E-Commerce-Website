@@ -12,40 +12,40 @@ const Register = () => {
 
     const navigate = useNavigate();
 
-    
 
-        const BASE_URL =
-            window.location.hostname === "localhost"
-                ? "http://localhost:5000"
-                : "https://megakart-backend.onrender.com";
 
-        const handleRegister = async (e) => {
-            e.preventDefault();
+    const BASE_URL =
+        window.location.hostname === "localhost"
+            ? "http://localhost:5000"
+            : "https://megakart-backend.onrender.com";
 
-            try {
-                const res = await axios.post(
-                    `${BASE_URL}/user/register`,
-                    { name, email, password },
-                    { withCredentials: true }
-                );
+    const handleRegister = async (e) => {
+        e.preventDefault();
 
-                toast.success(res.data.message || "Registered Successfully");
+        try {
+            const res = await axios.post(
+                `${BASE_URL}/user/register`,
+                { name, email, password },
+                { withCredentials: true }
+            );
 
-                setName("");
-                setEmail("");
-                setPassword("");
+            toast.success(res.data.message || "Registered Successfully");
 
-                navigate("/login");
+            setName("");
+            setEmail("");
+            setPassword("");
 
-            } catch (error) {
-                console.error(error);
+            navigate("/login");
 
-                toast.error(
-                    error?.response?.data?.message || "Registration Failed"
-                );
-            }
-        };
-    
+        } catch (error) {
+            console.error(error);
+
+            toast.error(
+                error?.response?.data?.message || "Registration Failed"
+            );
+        }
+    };
+
 
     return (
         <div>

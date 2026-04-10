@@ -188,6 +188,11 @@ const ProfilePage = () => {
     setNewAddress(emptyAddress);
   };
 
+  const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+
   // ---------- LOGOUT ----------
   const logoutUser = async () => {
     try {
@@ -200,7 +205,7 @@ const ProfilePage = () => {
 
       if (!confirm) return;
 
-      await axios.get("http://localhost:5000/user/logout", {
+      await axios.get(`${BASE_URL}/user/logout`, {
         withCredentials: true
       });
 

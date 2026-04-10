@@ -8,14 +8,21 @@ import swal from 'sweetalert';
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
 
+  const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+
+
   const fetchProducts  = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/products");
+      const res = await axios.get(`${BASE_URL}/products`);
       setProducts(res.data);
     } catch (error) {
       toast.error("Failed to fetch products");
     }
   };
+
 
   useEffect(() => { fetchProducts(); }, []);
 
@@ -35,7 +42,7 @@ const ManageProducts = () => {
 
 
     try {
-      await axios.delete(`http://localhost:5000/products/${id}`);
+      await axios.delete(`${BASE_URL}/products/${id}`);
       toast.success("Product is deleted");
       fetchProducts();
     } catch (error) {

@@ -11,6 +11,12 @@ const AdminSidebar = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
+const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+    
+
     const handleLogout = async () => {
         try {
             const confirm = await swal({
@@ -30,7 +36,7 @@ const AdminSidebar = () => {
                 return;
             }
 
-             await axios.get("http://localhost:5000/user/logout", {
+             await axios.get(`${BASE_URL}/user/logout`, {
                     withCredentials: true
                   });
 

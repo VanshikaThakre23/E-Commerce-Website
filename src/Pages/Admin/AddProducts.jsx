@@ -78,6 +78,13 @@ const AddProducts = () => {
     }));
   };
 
+  const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+
+
+
   // submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,7 +102,7 @@ const AddProducts = () => {
     formData.append("latestSection", product.latestSection);
 
     try {
-      await axios.post("http://localhost:5000/products", formData);
+      await axios.post(`${BASE_URL}/products`, formData);
       toast.success("Product Added!");
 
       // reset form
