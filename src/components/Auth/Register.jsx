@@ -12,8 +12,7 @@ const Register = () => {
 
     const navigate = useNavigate();
 
-    const handleRegister = async (e) => {
-        e.preventDefault();
+    
 
         const BASE_URL =
             window.location.hostname === "localhost"
@@ -46,8 +45,7 @@ const Register = () => {
                 );
             }
         };
-    }
-
+    
 
     return (
         <div>

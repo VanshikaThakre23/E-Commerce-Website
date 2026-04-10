@@ -33,7 +33,7 @@ const Login = () => {
         { email, password },
         { withCredentials: true }
       );
-      
+
       console.log("API Data:", res.data);
       console.log("res.data:", res.data)
       console.log("res.data.user:", res.data.user)
@@ -43,7 +43,7 @@ const Login = () => {
 
       dispatch(login(user));
 
-      const userId = user?.email;
+      const userId = user?._id;
 
       const userCart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
 
