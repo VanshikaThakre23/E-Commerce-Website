@@ -1,11 +1,46 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { IoMdLogOut } from "react-icons/io";
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../features/auth/authSlice';
 
 const AdminSidebar = () => {
 
+    const dispatch = useDispatch();
     const location = useLocation();
+    const navigate = useNavigate();
 
-   
+    const handleLogout = async () => {
+        try {
+            const confirm = await swal({
+                title: "Really ??",
+                text: "Are you sure you want to logout ??",
+                icon: "warning",
+                dangerMode: true,
+                buttons:
+                {
+                    confirm: "Yes Logout",
+                    cancel: "No"
+                },
+
+            });
+
+            if (!confirm) {
+                return;
+            }
+
+             await axios.get("http://localhost:5000/user/logout", {
+                    withCredentials: true
+                  });
+
+            dispatch(logout());
+            navigate("/login");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -30,6 +65,12 @@ const AdminSidebar = () => {
                             <Link to="/viewUsers">Users</Link>
                         </li>
                     )}
+                    <button
+                        onClick={handleLogout}
+                        className='text-red-600 flex gap-2 items-center cursor-pointer'>
+                        Logout
+                        <IoMdLogOut className='text-2xl' />
+                    </button>
                 </ul>
             </div>
         </>

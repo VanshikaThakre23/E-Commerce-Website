@@ -41,7 +41,7 @@ const WishlistPage = () => {
       {/* Header */}
       <div className="flex justify-between items-baseline mb-8 border-b pb-4">
         <h1 className="text-2xl font-bold text-gray-900">My Wishlist</h1>
-        <p className="text-sm text-gray-500">{wishlist?.length || 0} Items Saved</p>
+        <p className="text-sm text-gray-500">{wishlist?.length || 0} Items Wishlisted</p>
       </div>
 
       {!wishlist || wishlist.length === 0 ? (

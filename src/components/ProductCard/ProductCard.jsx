@@ -1,14 +1,17 @@
 import Rating from "@mui/material/Rating";
 import { Link } from "react-router-dom";
 import ActionIcon from "../Common/ActionIcon";
+import { useSelector } from "react-redux";
 
 const ProductCard = ({ item }) => {
+  const user = useSelector((state) => state.auth.user);
+
   return (
     <div className="ProductCard border-2 relative rounded-2xl group overflow-hidden h-100">
 
       {/* Image Section */}
       <div className="relative overflow-hidden w-full h-72 bg-gray-100">
-        <Link to={`/items/${item._id}`} className="block w-full h-full">
+        <Link to={`/products/${item._id}`} className="block w-full h-full">
           <img
             src={item.img}
             alt={item.title}
@@ -17,11 +20,14 @@ const ProductCard = ({ item }) => {
         </Link>
       </div>
 
-      {/* ACTION ICONS ✅ */}
-      <div className="absolute bottom-1 right-2 flex gap-2">
-        <ActionIcon type="cart" item={item} />
-        <ActionIcon type="wishlist" item={item} />
-      </div>
+
+      {user.role !== "admin" && (
+        <div className="absolute bottom-1 right-2 flex gap-2">
+          <ActionIcon type="cart" item={item} />
+          <ActionIcon type="wishlist" item={item} />
+        </div>
+      )}
+
 
       {/* Discount Badge */}
       {item.discount && (

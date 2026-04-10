@@ -5,16 +5,29 @@ import { FaArrowLeft } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Pagination } from "swiper/modules";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '../../features/cart/cartSlice';
 import { addToWishlist } from '../../features/wishlist/wishlistSlice';
+import { addToCartAPI } from '../../features/cart/cartActions';
+import { toast } from 'react-toastify';
 
 const ProductDetails = () => {
     const { id } = useParams();
     const navigate = useNavigate(); // Necessary fix for the "Go Back" button
     const [product, setProduct] = useState();
 
-        const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth.user);
+
+    const handleAddtoCart = (product) => {
+        dispatch(addToCartAPI(product));
+        toast.success(" Added to Cart");
+    };
+
+    const handleAddtoWishlist = (product) => {
+        dispatch(addToWishlist(product));
+        toast.success("Added to Wishlist");
+    }
 
     useEffect(() => {
         axios.get(`http://localhost:5000/products/${id}`)
@@ -38,54 +51,41 @@ const ProductDetails = () => {
 
                 <div className="flex flex-col lg:flex-row gap-16">
 
-                    {/* Image Section - Frameless & Elegant */}
-                    {/* <div className="lg:w-3/5 bg-[#f9f9f9] flex justify-center products-center p-12 min-h-125">
-                        <img
-                            src={product.img}
-                            alt={product.title}
-                            className="w-full max-w-md object-contain mix-blend-multiply"
-                        />
-                    </div> */}
 
                     <div className="lg:w-3/5 bg-[#f9f9f9] flex justify-center products-center p-12 min-h-125">
-                        
-                            <Swiper
-                                slidesPerView={1}
-                                loop={true}
-                                grabCursor={true}
-                                pagination={true}
-                                modules={[Pagination]}
-                            >
 
-                                {product.img && (
-                                    <SwiperSlide>
-                                        <img
-                                            src={product.img}
-                                            alt={product.title}
-                                            className="w-full h-auto "
-                                        />
-                                    </SwiperSlide>
-                                )}
+                        <Swiper
+                            slidesPerView={1}
+                            loop={true}
+                            grabCursor={true}
+                            pagination={true}
+                            modules={[Pagination]}
+                        >
 
-                                {product.alternateimg && (
-                                    <SwiperSlide>
-                                        <img
-                                            src={product.alternateimg}
-                                            alt="alternate"
-                                            className="w-full h-auto "
-                                        />
-                                    </SwiperSlide>
-                                )}
+                            {product.img && (
+                                <SwiperSlide>
+                                    <img
+                                        src={product.img}
+                                        alt={product.title}
+                                        className="w-full h-auto "
+                                    />
+                                </SwiperSlide>
+                            )}
 
-                            </Swiper>
-                       
+                            {product.alternateimg && (
+                                <SwiperSlide>
+                                    <img
+                                        src={product.alternateimg}
+                                        alt="alternate"
+                                        className="w-full h-auto "
+                                    />
+                                </SwiperSlide>
+                            )}
+
+                        </Swiper>
+
                     </div>
 
-
-
-
-
-                    {/* Info Section - Clean & Structured */}
                     <div className="lg:w-2/5 flex flex-col">
                         <header className="mb-10">
                             <p className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 mb-4 font-semibold">
@@ -103,30 +103,35 @@ const ProductDetails = () => {
                             </div>
                         </header>
 
-                        {/* Description Placeholder (Optional but helps look) */}
                         <div className="mb-10">
                             <p className="text-sm leading-relaxed text-zinc-600 max-w-md">
                                 Experience premium craftsmanship and timeless design. This piece is curated for those who value both style and functionality in their daily essentials.
                             </p>
                         </div>
 
-                        {/* Action Buttons - High Contrast */}
-                        <div className="space-y-4">
-                            <button
-                            onClick={()=>{
-                                dispatch(addToCart(product))
-                            }}
-                            className="w-full bg-[#f3842a] text-white py-5 text-xs uppercase tracking-[0.2em] font-bold hover:bg-[#bc5806] hover:cursor-pointer transition-colors active:scale-[0.99]">
-                                Add to  Cart
-                            </button>
-                            <button
-                             onClick={()=>{
-                                dispatch(addToWishlist(product))
-                            }}
-                            className="w-full bg-transparent border border-zinc-200 text-zinc-900 py-5 text-xs uppercase font-bold hover:border-zinc-900 hover:cursor-pointer transition-colors">
-                                Add to Wishlist
-                            </button>
-                        </div>
+                        {
+                            user.role !== "admin" && (
+                                <div className="space-y-4">
+                                    <button
+                                        onClick={() => {
+                                            // dispatch(addToCart(product))
+                                            handleAddtoCart(product);
+                                        }}
+                                        className="w-full bg-[#f3842a] text-white py-5 text-xs uppercase tracking-[0.2em] font-bold hover:bg-[#bc5806] hover:cursor-pointer transition-colors active:scale-[0.99]">
+                                        Add to  Cart
+                                    </button>
+                                    <button
+                                        onClick={() => {
+
+                                            handleAddtoWishlist(product)
+                                        }}
+                                        className="w-full bg-transparent border border-zinc-200 text-zinc-900 py-5 text-xs uppercase font-bold hover:border-zinc-900 hover:cursor-pointer transition-colors">
+                                        Add to Wishlist
+                                    </button>
+                                </div>
+                            )
+                        }
+
 
                     </div>
                 </div>

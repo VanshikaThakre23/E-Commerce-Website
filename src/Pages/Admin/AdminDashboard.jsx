@@ -3,29 +3,29 @@ import { Link, useLocation } from 'react-router-dom';
 import AdminSidebar from "./AdminSidebar";
 
 const AdminDashboard = () => {
-  const[totalUser , setTotalUser ] = useState(0);
-  const[totalProducts , setTotalProducts ] = useState(0);
+  const [totalUser, setTotalUser] = useState(0);
+  const [totalProducts, setTotalProducts] = useState(0);
 
   // const location = useLocation();
 
-  useEffect(()=>{
-    const userCount = async()=>{
+  useEffect(() => {
+    const userCount = async () => {
       const res = await fetch("http://localhost:5000/user/totalUser");
       const data = await res.json();
       setTotalUser(data.totalUser);
     };
     userCount();
-  },[]);
+  }, []);
 
 
-  useEffect(()=>{
-    const productCount = async()=>{
+  useEffect(() => {
+    const productCount = async () => {
       const res = await fetch("http://localhost:5000/products/totalProducts");
       const data = await res.json();
       setTotalProducts(data.totalProducts);
     };
     productCount();
-  },[]);
+  }, []);
 
 
 
@@ -33,7 +33,7 @@ const AdminDashboard = () => {
     <div className="flex min-h-screen bg-gray-100">
 
       {/* Sidebar */}
-     <AdminSidebar/>
+      <AdminSidebar />
 
       {/* Main Content */}
       <div className="flex-1 p-8">
@@ -49,10 +49,10 @@ const AdminDashboard = () => {
           </div>
 
 
-           <div className="bg-white p-6 rounded-lg shadow">
+          <div className="bg-white p-6 rounded-lg shadow">
             <Link to={"/users"}>
-            <h3 className="text-gray-500">Total User</h3>
-            <p className="text-2xl font-bold mt-2">{totalUser}</p>
+              <h3 className="text-gray-500">Total User</h3>
+              <p className="text-2xl font-bold mt-2">{totalUser}</p>
             </Link>
           </div>
 
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
             <p className="text-2xl font-bold mt-2">not done </p>
           </div>
 
-         
+
 
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-gray-500">Revenue</h3>
@@ -70,6 +70,12 @@ const AdminDashboard = () => {
           </div>
 
         </div>
+
+        <Link to={"/"}>
+          <button className="mt-4 border-2 border-gray-700 py-2 px-2 text-gray-900 font-semibold rounded-2xl bg-[#1171a5] cursor-pointer">
+            Do you want to see your website ?
+          </button>
+        </Link>
 
       </div>
     </div>

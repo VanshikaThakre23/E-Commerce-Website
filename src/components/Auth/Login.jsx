@@ -50,8 +50,13 @@ const Login = () => {
 
       toast.success(res.data.message);
 
-      navigate("/");
+      console.log("jnbljk;",user)
 
+      if(user.role==="admin"){
+        navigate("/adminHome");
+      }else{
+      navigate("/");
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
     }

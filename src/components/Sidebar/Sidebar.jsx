@@ -6,13 +6,13 @@ import Slider from "@mui/material/Slider";
 import { X } from "lucide-react";
 
 const categories = 
-["All" , "Men", "Women", "Kids", "Bags","Footwear","Groceries", "Accessories" ,"Beauty","Jewellary"];
+["All" , "Men", "Women", "Kids", "Bags","Footwear","Groceries", "Accessories" ,"Beauty","Jewellery"];
 
 const Sidebar = ({selectedCategory , setSelectedCategory}) => {
     const [isOpen, setIsOpen] = useState(true);
     const [priceRange, setPriceRange] = useState([0, 10000]);
     const [sortBy, setSortBy] = useState("");
-    const [rating, setRating] = useState(null);
+   
 
     const handleCategory = (item) => {
         setSelectedCategory (item);
@@ -102,26 +102,7 @@ const Sidebar = ({selectedCategory , setSelectedCategory}) => {
 
                     </div>
 
-                    {/* Rating Filter */}
-                    {/* <div>
-                        <h3 className="font-semibold mb-3 text-md">RATING</h3>
-
-                        {[1,2,3,4].map((star) => (
-                            <div
-                                key={star}
-                                className="flex items-center gap-2 cursor-pointer"
-                                onClick={() => setRating(star)}
-                            >
-                                <input
-                                    type="radio"
-                                    checked={rating === star}
-                                    readOnly
-                                />
-                                <span>{star} ★ & above</span>
-                            </div>
-                        ))}
-                    </div> */}
-
+                   
                     {/* Sort By */}
                     <div>
                         <h3 className="font-semibold mb-3 text-md">SORT BY</h3>
@@ -145,7 +126,7 @@ const Sidebar = ({selectedCategory , setSelectedCategory}) => {
                         onClick={() => {
                           setSelectedCategory("All");
                             setPriceRange([0, 10000]);
-                            setRating(null);
+                           
                             setSortBy("");
                         }}
                         className="w-full bg-black text-white py-2 rounded-md text-sm hover:bg-gray-800 transition"

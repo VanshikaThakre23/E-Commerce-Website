@@ -76,7 +76,7 @@ const Footer = () => {
 
                 {/* Bottom Section */}
                 <div className="border-t border-gray-700 mt-8 pt-4 text-center text-sm">
-                    © {new Date().getFullYear()} ShopEase. All rights reserved.
+                    © {new Date().getFullYear()} Megakart. All rights reserved.
                 </div>
             </footer>
 

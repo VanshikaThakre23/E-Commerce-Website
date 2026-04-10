@@ -9,13 +9,16 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { IoHome } from "react-icons/io5";
-
-
+import { RiUserStarFill } from "react-icons/ri";
 import { FaRegHeart } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+
+import ManageAccountsSharpIcon from '@mui/icons-material/ManageAccountsSharp';
+
+
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setCart } from '../../features/cart/cartSlice';
@@ -37,7 +40,7 @@ const Header = () => {
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const user = useSelector((state) => state.auth.user); // ✅ MAIN FIX
+    const user = useSelector((state) => state.auth.user); 
     console.log(user);
 
     const cartSelector = useSelector((state) => state.cart.cartItem);
@@ -124,14 +127,14 @@ const Header = () => {
                                         <>
 
                                             {/* iska mtlb hai agr ye true hai location.pathname !== "/" to && ke baad ka code chalega mtlb home route nhi hai to uska icon dikhao  */}
-                                            {
+                                            {user.role !== 'admin' && (
                                                 location.pathname !== "/" && (
                                                     <Tooltip title="Home">
                                                         <IconButton aria-label="home">
                                                             <Link to={"/"}>
                                                                 <StyledBadge>
 
-                                                                    <IoHome />
+                                                                    <IoHome  className='text-gray-500 hover:text-[#0b4778]'/>
 
                                                                 </StyledBadge>
                                                             </Link>
@@ -139,56 +142,79 @@ const Header = () => {
                                                         </IconButton>
                                                     </Tooltip>
                                                 )
+                                            )
                                             }
 
-                                            {
-                                                location.pathname !== "/profile" && (
+                                            {user.role !== "admin" &&(
+                                                 location.pathname !== "/profile" && (
                                                     <Tooltip title="Profile">
                                                         <IconButton aria-label="profile">
                                                             <Link to={"/profile"}>
                                                                 <StyledBadge  >
 
-                                                                    <MdAccountCircle />
+                                                                    <MdAccountCircle  className='text-gray-500 hover:text-[#0b4778]' />
 
                                                                 </StyledBadge >
                                                             </Link>
                                                         </IconButton>
                                                     </Tooltip>
                                                 )
+                                            )
+                                               
                                             }
 
-                                            {
+                                            { user.role !== "admin" &&(
                                                 location.pathname !== "/wishlist" && (
                                                     <Tooltip title="Wishlist" >
                                                         <IconButton aria-label="wishlist">
                                                             <Link to={"/wishlist"}>
                                                                 <StyledBadge badgeContent={wishlistSelector.length ? wishlistSelector.length : 0} >
 
-                                                                    <FaRegHeart />
+                                                                    <FaRegHeart  className='text-gray-500 hover:text-[#0b4778]' />
                                                                 </StyledBadge>
                                                             </Link>
 
                                                         </IconButton>
                                                     </Tooltip>
                                                 )
+                                            )
                                             }
 
 
-                                            {
+                                            {user.role !== "admin" &&(
                                                 location.pathname !== "/cart" && (
                                                     <Tooltip title="Cart">
                                                         <IconButton aria-label="cart">
                                                             <Link to={"/cart"}>
 
                                                                 <StyledBadge badgeContent={cartSelector.length ? cartSelector.length : 0} >
-                                                                    <ShoppingCartIcon />
+                                                                    <ShoppingCartIcon  className='text-gray-500 hover:text-[#0b4778]'  />
                                                                 </StyledBadge>
                                                             </Link>
 
                                                         </IconButton>
                                                     </Tooltip>
                                                 )
+                                            )
                                             }
+
+                                            {
+                                                user.role === "admin"&&(
+                                                    location.pathname !== "/adminHome" &&(
+                                                    <Tooltip title="Admin">
+                                                        <IconButton aria-label="admin" >
+                                                            <Link to={"/adminHome"}>
+                                                                    <ManageAccountsSharpIcon 
+                                                                    fontSize='large'
+                                                                    className='text-gray-500 hover:text-[#0b4778]' />
+                                                            </Link>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                )
+                                            )
+                                            }
+
+            
 
                                         </>
 

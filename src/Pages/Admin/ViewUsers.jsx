@@ -39,7 +39,7 @@ const ViewUsers = () => {
                                 </div>
 
                                 <div className="border-t border-gray-100 pt-4">
-                                    <p className="text-xs font-semibold text-gray-400 uppercase mb-3">Saved Addresses</p>
+                                    <p className="text-xs font-semibold text-gray-400 uppercase mb-3">User Address</p>
                                     
                                     {user.addresses && user.addresses.length > 0 ? (
                                         <div className="space-y-3">

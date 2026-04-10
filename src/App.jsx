@@ -20,6 +20,7 @@ import ProductDetails from './Pages/ProductDetailsPage/ProductDetails.jsx';
 import ManageProducts from './Pages/Admin/ManageProducts.jsx';
 import Categorypage from './Pages/Categorypage/Categorypage.jsx';
 import CheckoutPage from './Pages/CheckoutPage/CheckoutPage.jsx';
+import MyOrderPage from './Pages/MyOrderPage/MyOrderPage.jsx';
 
 
 const App = () => {
@@ -40,8 +41,9 @@ const App = () => {
             <Route path='/cart' element={<CartPage/>}/>
             <Route path='/checkout' element={<CheckoutPage/>}/>
             <Route path='/wishlist' element={<WishlistPage/>}/>
+            <Route path='/profile/myorder' element={<MyOrderPage/>}/>
             <Route path='/products/:id' element={<ProductDetails/>}/>
-            <Route path='/category/:category/:subcategory' element={<Categorypage/>}/>
+            <Route path='/category/:id/:subId' element={<Categorypage/>}/>
 
             {/* admin routes */}
             <Route path='/adminHome' element={<AdminDashboard/>}/>

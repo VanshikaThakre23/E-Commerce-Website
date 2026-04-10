@@ -45,15 +45,15 @@ const HomePage = () => {
   const [selectedCategory, setSelectedCategory] = useState("Footwear");
 
   const tabsList = [
-    { id: 1, title: "Footwear" },
-    { id: 2, title: "Electronics" },
+    { id: 1, title: "Fashion" },
+    { id: 2, title: "Appliances" },
     { id: 3, title: "Bags" },
-    { id: 4, title: "Jewellary" },
-    { id: 5, title: "Beauty" },
-    { id: 6, title: "Men" },
-    { id: 7, title: "Women" },
-    { id: 8, title: "Kids" },
-    { id: 9, title: "Wellness" },
+    { id: 4, title: "Footwear" },
+    { id: 5, title: "Groceries" },
+    { id: 6, title: "Beauty" },
+    { id: 7, title: "Wellness" },
+    { id: 8, title: "Jewellery" },
+  
   ];
 
   const featuresData = [
@@ -64,24 +64,10 @@ const HomePage = () => {
     { icon: <FaHeadset size={35} />, title: "Support 24/7", description: "Contact us Anytime" },
   ];
 
-  
-console.log(user);
 
-  const sharedActions = [
-    {
-      title: "Wishlist",
-      Icon: FaRegHeart,
-      onClick: (item) =>
-        handleAuthAction((data) => dispatch(addToWishlist(data)), item),
-    },
-    {
-      title: "Add to Cart",
-      Icon: FaShoppingCart,
-      onClick: (item) =>
-        handleAuthAction((data) => dispatch(addToCart(data)), item),
-    },
-  ];
+  console.log(user);
 
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -91,14 +77,16 @@ console.log(user);
           axios.get("http://localhost:5000/products/latest"),
         ]);
 
+
         setProducts(all.data);
         setPopularProducts(popular.data);
         setLatestProducts(latest.data);
+           console.log("popular data", popular)
       } catch (err) {
         console.log(err);
       }
     };
-
+ 
     fetchData();
   }, []);
 
@@ -170,13 +158,13 @@ console.log(user);
             title="Latest Products"
             data={latestProducts}
             renderItem={(item) => (
-              <ProductCard item={item } />
+              <ProductCard item={item} />
             )}
             slidesPerView={5}
           />
 
           {/* Testimonials */}
-          <ReusableSlider
+          {/* <ReusableSlider
             title="See What our Customer Says"
             data={testimonials}
             renderItem={(item) => (
@@ -193,7 +181,7 @@ console.log(user);
               </div>
             )}
             slidesPerView={4}
-          />
+          /> */}
         </div>
       </div>
 

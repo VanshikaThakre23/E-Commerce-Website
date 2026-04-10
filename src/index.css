@@ -43,21 +43,25 @@ body {
 }
 
 .homeBtn {
-  background: #105981 !important;
+  background: #e17319 !important;
   color: #fff;
   width: 5rem;
   height: 2.4rem;
   padding: 4px;
   border-radius: 4px;
 }
+.homeBtn:hover{
+  background: #c55b04 !important;
+}
 
 .authBtn {
-  background: #105981 !important;
+  background: #e17319 !important;
   color: #fff;
   width: 5rem;
   height: 2.4rem;
   padding: 4px;
   border-radius: 4px;
+  transition: all 0.2s ease-in-out;
 }
 
 .authBtn:hover {
@@ -74,6 +78,10 @@ body {
   color: #000;
   transition: 0.1s ease-in-out;
 }
+
+/* .hearIcon{
+  border: ;
+} */
 
 .mySwiper {
   overflow: inherit !important;

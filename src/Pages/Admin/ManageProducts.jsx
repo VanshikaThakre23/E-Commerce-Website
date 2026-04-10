@@ -36,7 +36,7 @@ const ManageProducts = () => {
 
     try {
       await axios.delete(`http://localhost:5000/products/${id}`);
-      swal("Deleted!", "Your product has been deleted!", "success");
+      toast.success("Product is deleted");
       fetchProducts();
     } catch (error) {
       toast.error("Error deleting");
@@ -77,7 +77,7 @@ const ManageProducts = () => {
                   </td>
                   <td className="px-6 py-4 text-sm font-semibold">Rs. {item.newPrice}</td>
                   <td className="px-6 py-4 text-sm font-semibold">Rs. {item.oldPrice}</td>
-                  <td className="px-6 py-4 text-sm font-semibold">Rs. {item.discount}</td>
+                  <td className="px-6 py-4 text-sm font-semibold">  {item.discount}%</td>
                   <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => deleteProduct(item._id)}

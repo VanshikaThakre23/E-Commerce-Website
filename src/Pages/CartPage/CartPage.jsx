@@ -107,7 +107,7 @@ const CartPage = () => {
                       </div>
                     </div>
 
-                    {/* Price */}
+                    {/* Price part*/}
                     <div className="text-lg font-bold text-right">
                      Rs {(item.newPrice * item.quantity).toFixed(2)}
                     </div>
@@ -115,7 +115,7 @@ const CartPage = () => {
                 ))}
               </div>
 
-              {/* RIGHT SIDE - ORDER SUMMARY */}
+              
               <div className="bg-white p-6 rounded-lg shadow-sm h-fit">
                 <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
 
@@ -136,7 +136,7 @@ const CartPage = () => {
 
                 <div className="flex justify-between mb-2 text-sm">
                   <span>Tax</span>
-                  <span>Rs 12</span>
+                  <span>Rs 00</span>
                 </div>
 
                 <div className="flex justify-between font-bold text-lg border-t pt-3 mt-3">
