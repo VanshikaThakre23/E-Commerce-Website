@@ -28,9 +28,14 @@ const ProductDetails = () => {
         dispatch(addToWishlist(product));
         toast.success("Added to Wishlist");
     }
+     const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/products/${id}`)
+        axios.get(`${BASE_URL}/products/${id}`)
             .then((res) => setProduct(res.data))
             .catch((err) => console.error(err));
     }, [id]);

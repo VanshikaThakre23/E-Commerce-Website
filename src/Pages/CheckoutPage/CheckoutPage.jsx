@@ -53,6 +53,12 @@ const CheckoutPage = () => {
   }, [cart]);
   console.log(cart);
 
+ const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+
+
   const handlePlaceOrder = async () => {
     if (!selectedAddressId) return toast.error("Plase select address");
 
@@ -70,7 +76,7 @@ const CheckoutPage = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost/5000/order/placeOrders",orderData,{withCredentials:true});
+      const res = await axios.post(`${BASE_URL}/order/placeOrders`,orderData,{withCredentials:true});
 
       if(res.data.success){
         return toast.success("Order placed successfully");

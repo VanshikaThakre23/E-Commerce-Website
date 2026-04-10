@@ -67,15 +67,20 @@ const HomePage = () => {
 
   console.log(user);
 
+  const BASE_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://megakart-backend.onrender.com";
+
  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [all, popular, latest] = await Promise.all([
-          axios.get("http://localhost:5000/products"),
-          axios.get("http://localhost:5000/products/popular"),
-          axios.get("http://localhost:5000/products/latest"),
-        ]);
+       const [all, popular, latest] = await Promise.all([
+  axios.get(`${BASE_URL}/products`),
+  axios.get(`${BASE_URL}/products/popular`),
+  axios.get(`${BASE_URL}/products/latest`),
+]);
 
 
         setProducts(all.data);
