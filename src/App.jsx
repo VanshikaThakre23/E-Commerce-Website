@@ -21,47 +21,48 @@ import ManageProducts from './Pages/Admin/ManageProducts.jsx';
 import Categorypage from './Pages/Categorypage/Categorypage.jsx';
 import CheckoutPage from './Pages/CheckoutPage/CheckoutPage.jsx';
 import MyOrderPage from './Pages/MyOrderPage/MyOrderPage.jsx';
+import ViewOrders from './Pages/Admin/ViewOrders.jsx';
 
 
 const App = () => {
   return (
     <>
       <BrowserRouter>
-      <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col">
 
-        <Header />
+          <Header />
 
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/productlisting" element={<ProductListing />} />
-            <Route path="/login" element={<Login/>} />
-            <Route path='register' element={<Register/>}/>
-            <Route path='/profile' element={<ProfilePage/>}/>
-            <Route path='/cart' element={<CartPage/>}/>
-            <Route path='/checkout' element={<CheckoutPage/>}/>
-            <Route path='/wishlist' element={<WishlistPage/>}/>
-            <Route path='/profile/myorder' element={<MyOrderPage/>}/>
-            <Route path='/products/:id' element={<ProductDetails/>}/>
-            <Route path='/category/:id/:subId' element={<Categorypage/>}/>
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/productlisting" element={<ProductListing />} />
+              <Route path="/login" element={<Login />} />
+              <Route path='register' element={<Register />} />
+              <Route path='/profile' element={<ProfilePage />} />
+              <Route path='/cart' element={<CartPage />} />
+              <Route path='/checkout' element={<CheckoutPage />} />
+              <Route path='/wishlist' element={<WishlistPage />} />
+              <Route path='/profile/myorder' element={<MyOrderPage />} />
+              <Route path='/products/:id' element={<ProductDetails />} />
+              <Route path='/category/:id/:subId' element={<Categorypage />} />
 
-            {/* admin routes */}
-            <Route path='/adminHome' element={<AdminDashboard/>}/>
-            <Route path='/addProducts' element={<AddProducts/>}/>
-            {/* <Route path='/admin' element={<AdminSidebar/>}/> */}
-            <Route path='/viewUsers' element={<ViewUsers/>}/>
-            <Route path='/manageProducts' element={<ManageProducts/>}/>
+              {/* admin routes */}
+              <Route path='/adminHome' element={<AdminDashboard />} />
+              <Route path='/addProducts' element={<AddProducts />} />
+              {/* <Route path='/admin' element={<AdminSidebar/>}/> */}
+              <Route path='/viewUsers' element={<ViewUsers />} />
+              <Route path='/manageProducts' element={<ManageProducts />} />
+              <Route path='/viewOrders' element={<ViewOrders />} />
 
+            </Routes>
+          </main>
 
-          </Routes>
-        </main>
+          <Footer />
 
-        <Footer />
+        </div>
+      </BrowserRouter>
 
-      </div>
-    </BrowserRouter>
-
-    <ToastContainer position='top-right' autoClose={1000}/>
+      <ToastContainer position='top-right' autoClose={1000} />
 
     </>
   )

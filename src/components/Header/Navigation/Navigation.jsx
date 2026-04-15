@@ -1,16 +1,24 @@
 import Button from '@mui/material/Button';
 import React, { useState } from 'react';
 import { RiMenu2Fill } from "react-icons/ri";
-import { FaAngleDown } from "react-icons/fa6";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6"; // Added Up arrow for toggle
 import { IoRocketOutline } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 
-
 const Navigation = () => {
+  const [open, setOpen] = useState(false);
+  const [mobileSubmenu, setMobileSubmenu] = useState(null); // Track which submenu is open on mobile
+
+  const toggleSubmenu = (index) => {
+    if (mobileSubmenu === index) {
+      setMobileSubmenu(null); // Close if already open
+    } else {
+      setMobileSubmenu(index); // Open clicked one
+    }
+  };
 
   const navItems = [
     { name: "Home", path: "/" },
-
     {
       name: "Fashion",
       id: "Fashion",
@@ -20,7 +28,6 @@ const Navigation = () => {
         { name: "Kids", subId: "Kids" },
       ]
     },
-
     {
       name: "Appliances",
       id: "Appliances",
@@ -29,7 +36,6 @@ const Navigation = () => {
         { name: "Home", subId: "Home" },
       ]
     },
-
     {
       name: "Bags",
       id: "Bags",
@@ -39,7 +45,6 @@ const Navigation = () => {
         { name: "School-Bag", subId: "School-Bag" },
       ]
     },
-
     {
       name: "Footwear",
       id: "Footwear",
@@ -49,7 +54,6 @@ const Navigation = () => {
         { name: "Kids", subId: "Kids" },
       ]
     },
-
     {
       name: "Groceries",
       id: "Groceries",
@@ -58,7 +62,6 @@ const Navigation = () => {
         { name: "Essentials", subId: "Essentials" },
       ]
     },
-
     {
       name: "Beauty",
       id: "Beauty",
@@ -67,7 +70,6 @@ const Navigation = () => {
         { name: "Makeup", subId: "Makeup" },
       ]
     },
-
     {
       name: "Wellness",
       id: "Wellness",
@@ -76,7 +78,6 @@ const Navigation = () => {
         { name: "Health", subId: "Health" },
       ]
     },
-
     {
       name: "Jewellery",
       id: "Jewellery",
@@ -85,66 +86,75 @@ const Navigation = () => {
         { name: "Silver", subId: "Silver" },
         { name: "Men", subId: "Men" },
         { name: "Women", subId: "Women" },
-        
       ]
     }
   ];
 
   return (
-    <>
-      <nav className='py-2 shadow-md shadow-gray-400/40'>
-        <div className="container flex items-center justify-end gap-8">
+    <nav className='py-2 shadow-md shadow-gray-400/40 bg-white relative'>
+      <div className="container flex items-center justify-between md:justify-end gap-4">
 
-          <div className="col1 w-[10%]">
-
-          </div>
-
-          <div className="col2 w-[75%]">
-            <ul className='flex items-center gap-8'>
-              {navItems.map((item, index) => (
-                <li key={index} className=' relative  group list-none'>
-                  <h3 className='link nav-link'> {item.name}</h3>
-
-
-
-                  {/* submenu */}
-                  {item.submenu && (
-                    <ul className="absolute left-0 top-[110%] hidden group-hover:block bg-white/95 backdrop-blur-md shadow-xl rounded-xl min-w-45 py-3 z-50 border border-gray-100 transition-all duration-200">
-                      {item.submenu.map((sub, i) => (
-                        <li key={i}>
-                          <Link
-                            to={`/category/${item.id}/${sub.subId}`}
-                            className="block px-5 py-2 text-md font font-semibold text-gray-900 hover:text-[#ef7e21] hover:bg-gray-50 rounded-md transition-all duration-150"
-                          >
-                            {sub.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-
-
-
-
-
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="col3 w-[20%]">
-            <p className='font-semibold flex items-center justify-center gap-2'>
-              <IoRocketOutline className="text-xl" />
-              Free Delivery within 40km
-            </p>
-          </div>
-
+        {/* Mobile Menu Button */}
+        <div className="md:hidden p-2">
+          <RiMenu2Fill
+            className="text-2xl cursor-pointer"
+            onClick={() => setOpen(!open)}
+          />
         </div>
-      </nav>
 
+        {/* Nav Items Container */}
+        <div className={`col2 md:w-[75%] w-full absolute md:static top-full left-0 bg-white md:bg-transparent shadow-md md:shadow-none z-50 transition-all duration-300 ${open ? "block" : "hidden md:block"}`}>
+          <ul className='flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-8 p-4 md:p-0'>
+            {navItems.map((item, index) => (
+              <li key={index} className='relative group list-none w-full md:w-auto border-b md:border-none border-gray-100 last:border-none'>
+                
+                {/* Main Link Header */}
+                <div 
+                  className='link nav-link cursor-pointer flex items-center justify-between py-2 md:py-0'
+                  onClick={() => toggleSubmenu(index)} // Handle mobile click
+                >
+                  <h3 className="font-semibold text-gray-800 md:font-normal">{item.name}</h3>
+                  {item.submenu && (
+                    <span className="md:hidden">
+                      {mobileSubmenu === index ? <FaAngleUp /> : <FaAngleDown />}
+                    </span>
+                  )}
+                </div>
 
-    </>
+                {/* Submenu Logic */}
+                {item.submenu && (
+                  <ul className={`
+                    md:absolute left-0 top-[110%] bg-white md:bg-white/95 backdrop-blur-md md:shadow-xl rounded-xl min-w-45 py-2 md:py-3 z-50 md:border border-gray-100 transition-all
+                    ${mobileSubmenu === index ? "block" : "hidden md:group-hover:block"}
+                  `}>
+                    {item.submenu.map((sub, i) => (
+                      <li key={i}>
+                        <Link
+                          to={`/category/${item.id}/${sub.subId}`}
+                          className="block px-5 py-2 text-md font-semibold text-gray-600 md:text-gray-900 hover:text-[#ef7e21] hover:bg-gray-50 rounded-md"
+                          onClick={() => setOpen(false)} // Close main menu when a sublink is clicked
+                        >
+                          {sub.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Right Text */}
+        <div className="col3 hidden md:flex w-[20%]">
+          <p className='font-semibold flex items-center justify-center gap-2 text-sm lg:text-base'>
+            <IoRocketOutline className="text-xl" />
+            <span className="whitespace-nowrap">Free Delivery within 40km</span>
+          </p>
+        </div>
+
+      </div>
+    </nav>
   );
 };
 

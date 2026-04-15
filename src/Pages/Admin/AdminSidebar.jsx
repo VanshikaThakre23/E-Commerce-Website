@@ -11,10 +11,8 @@ const AdminSidebar = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-const BASE_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000"
-    : "https://megakart-backend.onrender.com";
+  const BASE_URL = import.meta.env.VITE_API_URL;
+ 
     
 
     const handleLogout = async () => {
@@ -63,8 +61,8 @@ const BASE_URL =
                     {location.pathname !== "/manageproducts" && (
                         <li className="cursor-pointer transition-all duration-300 hover:text-[#043074] hover:scale-105 hover:translate-x-1"><Link to={"/manageproducts"}>Manage Products</Link></li>
                     )}
-                    {location.pathname !== "/orders" && (
-                        <li className="cursor-pointer transition-all duration-300 hover:text-[#043074] hover:scale-105 hover:translate-x-1"><Link to={"/orders"}>Orders</Link></li>
+                    {location.pathname !== "/viewOrders" && (
+                        <li className="cursor-pointer transition-all duration-300 hover:text-[#043074] hover:scale-105 hover:translate-x-1"><Link to={"/viewOrders"}>Orders</Link></li>
                     )}
                     {location.pathname !== "/users" && (
                         <li className="cursor-pointer transition-all duration-300 hover:text-[#043074] hover:scale-105 hover:translate-x-1">

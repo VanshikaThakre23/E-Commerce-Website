@@ -1,39 +1,41 @@
-import React, { useContext } from "react";
-// import { CartContext } from "../../context/CartContext";
+import React from "react";
 import { Link } from "react-router-dom";
 import { addToWishlist } from "../../features/wishlist/wishlistSlice";
-import { removeFromCart ,updateInCart} from "../../features/cart/cartSlice";
+import { removeFromCart, updateInCart } from "../../features/cart/cartSlice";
 import { useSelector, useDispatch } from 'react-redux';
 import swal from 'sweetalert';
+import { toast } from 'react-hot-toast'; // Ensure you have this imported
 
 const CartPage = () => {
-  //  const { cart, removeFromCart } = useContext(CartContext);
   const dispatch = useDispatch();
-
-  // get cart data from Redux
   const cart = useSelector((state) => state.cart.cartItem);
 
+  // Helper to calculate total safely
+  const calculateTotal = () => {
+    return cart.reduce((acc, item) => {
+      const price = Number(item.newPrice) || 0;
+      const qty = Number(item.quantity) || 0;
+      return acc + (price * qty);
+    }, 0).toFixed(2);
+  };
 
-  const handleDelete = async(id)=>{
+  const handleDelete = async (id) => {
     const willDelete = await swal({
       title: "Are you sure?",
-      text: "Are you sure that you want to remove thhis item?",
+      text: "Are you sure that you want to remove this item?",
       icon: "warning",
       dangerMode: true,
-       buttons:
-        {
-          cancel: "No",
-          confirm: "Yes",
-        },
+      buttons: {
+        cancel: "No",
+        confirm: "Yes",
+      },
     });
 
-    if (!willDelete) {
-      return;
-    }else{
-    dispatch(removeFromCart(id))
-      toast.success("Item removed successfully")
-  }
-  }
+    if (willDelete) {
+      dispatch(removeFromCart(id));
+      toast.success("Item removed successfully");
+    }
+  };
 
   return (
     <div className="container mx-auto p-6 min-h-screen bg-gray-50">
@@ -50,122 +52,85 @@ const CartPage = () => {
           </Link>
         </div>
       ) : (
-        <>
-          <div className="container mx-auto p-6 bg-gray-100 min-h-screen">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* LEFT SIDE - CART ITEMS */}
+          <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm">
+            {cart.map((item) => (
+              <div key={item._id} className="flex gap-4 border-b py-5 items-center">
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  className="w-28 h-28 object-cover rounded"
+                />
 
-              {/* LEFT SIDE - CART ITEMS */}
-              <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-sm">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">{item.title}</h3>
+                  <p className="text-green-600 text-sm">In stock</p>
 
-
-                {/* Items */}
-                {cart.map((item) => (
-                  <div
-                    key={item._id}
-                    className="flex gap-4 border-b py-5 items-center"
-                  >
-                 
-
-                    {/* Image */}
-                    <img
-                      src={item.img}
-                      alt={item.title}
-                      className="w-28 h-28 object-cover rounded"
+                  <div className="flex items-center gap-4 mt-2 text-sm">
+                    <label>Qty:</label>
+                    <input 
+                      type="number" 
+                      value={item.quantity} 
+                      min={1}
+                      onChange={(e) => {
+                        dispatch(updateInCart({
+                          id: item._id,
+                          qty: Number(e.target.value)
+                        }))
+                      }}    
+                      className="w-16 px-2 py-1 border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
-
-                    {/* Details */}
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-lg">{item.title}</h3>
-                      <p className="text-green-600 text-sm">In stock</p>
-
-                      <div className="flex items-center gap-4 mt-2 text-sm">
-                        {/* <span>Qty: {item.quantity}</span> */}
-                        <label htmlFor="">Qty:</label>
-                        <input type="number" name="" id="" defaultValue={item.quantity} min={1}
-                        onChange={(e)=>{
-                            dispatch(updateInCart({
-                              id:item._id,
-                              qty:Number(e.target.value)
-                            }))
-                        }}    
-                          className="w-16 px-2 py-1 border border-gray-300 rounded-md text-center 
-                         focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"/>
-                        <button
-                          onClick={() => {
-                            dispatch(addToWishlist(item))
-                            dispatch(removeFromCart(item._id));
-                          }}
-                          className="py-1 px-2  rounded-2xl bg-[#0c9005] border-2 border-[#075403] text-white ">
-                          Move to Wishlist
-                        </button>
-                        <button
-                          onClick={() => handleDelete(item._id)}
-                          className="py-1 px-2 bg-red-300 border-2 border-red-400 rounded-2xl"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Price part*/}
-                    <div className="text-lg font-bold text-right">
-                     Rs {(item.newPrice * item.quantity).toFixed(2)}
-                    </div>
+                    <button
+                      onClick={() => {
+                        dispatch(addToWishlist(item));
+                        dispatch(removeFromCart(item._id));
+                      }}
+                      className="py-1 px-2 rounded-2xl bg-[#0c9005] border-2 border-[#075403] text-white"
+                    >
+                      Move to Wishlist
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item._id)}
+                      className="py-1 px-2 bg-red-300 border-2 border-red-400 rounded-2xl"
+                    >
+                      Remove
+                    </button>
                   </div>
-                ))}
+                </div>
+
+                <div className="text-lg font-bold text-right">
+                  Rs {(Number(item.newPrice || 0) * Number(item.quantity || 0)).toFixed(2)}
+                </div>
               </div>
-
-              
-              <div className="bg-white p-6 rounded-lg shadow-sm h-fit">
-                <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
-
-                <div className="flex justify-between mb-2 text-sm">
-                  <span>Subtotal</span>
-                  <span>
-                   Rs 
-                    {cart
-                      .reduce((acc, item) => acc + item.newPrice * item.quantity, 0)
-                      .toFixed(2)}
-                  </span>
-                </div>
-
-                <div className="flex justify-between mb-2 text-sm">
-                  <span>Shipping</span>
-                  <span className="text-green-600">Free</span>
-                </div>
-
-                <div className="flex justify-between mb-2 text-sm">
-                  <span>Tax</span>
-                  <span>Rs 00</span>
-                </div>
-
-                <div className="flex justify-between font-bold text-lg border-t pt-3 mt-3">
-                  <span>Total</span>
-                  <span>
-                   Rs 
-                    {cart
-                      .reduce((acc, item) => acc + item.newPrice * item.quantity, 0)
-                      .toFixed(2)}
-                  </span>
-                </div>
-
-                {/* Checkout */}
-                <Link to="/checkout">
-                  <button className="w-full mt-5 bg-amber-600 text-white py-3 rounded-lg font-semibold">
-                    Proceed to Checkout
-                  </button>
-                </Link>
-
-                <p className="text-xs text-gray-500 mt-4 text-center">
-                  Secure purchase. Ships from multiple sellers 
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
-        </>
+
+          {/* RIGHT SIDE - SUMMARY */}
+          <div className="bg-white p-6 rounded-lg shadow-sm h-fit">
+            <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
+            <div className="flex justify-between mb-2 text-sm">
+              <span>Subtotal</span>
+              <span>Rs {calculateTotal()}</span>
+            </div>
+            <div className="flex justify-between mb-2 text-sm">
+              <span>Shipping</span>
+              <span className="text-green-600">Free</span>
+            </div>
+            <div className="flex justify-between font-bold text-lg border-t pt-3 mt-3">
+              <span>Total</span>
+              <span>Rs {calculateTotal()}</span>
+            </div>
+
+            <Link to="/checkout">
+              <button className="w-full mt-5 bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors">
+                Proceed to Checkout
+              </button>
+            </Link>
+          </div>
+        </div>
       )}
     </div>
-
   );
 };
 

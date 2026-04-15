@@ -67,11 +67,7 @@ const HomePage = () => {
 
   console.log(user);
 
-  const BASE_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000"
-    : "https://megakart-backend.onrender.com";
-
+  const BASE_URL = import.meta.env.VITE_API_URL;
  
   useEffect(() => {
     const fetchData = async () => {

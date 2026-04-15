@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MapPin, LogOut, Plus, ChevronRight, Phone, Edit3, Trash2, X } from "lucide-react";
+import { MapPin, LogOut, Plus, ChevronRight, Phone, Edit3, Trash2, X, Package } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { logout } from "../../features/auth/authSlice";
@@ -12,6 +12,7 @@ import { setWishlist } from "../../features/wishlist/wishlistSlice";
 const ProfilePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   // ---------- STATE ----------
   const [user, setUser] = useState(null);
@@ -20,6 +21,7 @@ const ProfilePage = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [editingAddressId, setEditingAddressId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [orders, setOrders] = useState([]);
 
   const emptyAddress = {
     fullName: "",
@@ -33,14 +35,11 @@ const ProfilePage = () => {
 
   const [newAddress, setNewAddress] = useState(emptyAddress);
 
-  // ---------- GET USER + ADDRESSES ----------
+  // ---------- FETCH USER & ADDRESSES ----------
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/user/me",
-          { withCredentials: true }
-        );
+        const res = await axios.get(`${BASE_URL}/user/me`, { withCredentials: true });
         setUser(res.data.user);
       } catch (error) {
         navigate("/login");
@@ -49,10 +48,7 @@ const ProfilePage = () => {
 
     const fetchAddresses = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/address/myAddress",
-          { withCredentials: true }
-        );
+        const res = await axios.get(`${BASE_URL}/address/myAddress`, { withCredentials: true });
         setAddresses(res.data.data);
       } catch (err) {
         console.log(err);
@@ -61,172 +57,82 @@ const ProfilePage = () => {
 
     fetchUser();
     fetchAddresses();
-  }, [navigate]);
+  }, [navigate, BASE_URL]);
 
-  // ---------- INPUT CHANGE ----------
+  // ---------- FETCH ORDERS ----------
+  useEffect(() => {
+    if (activeSection === "orders") {
+      setLoading(true);
+      axios.get(`${BASE_URL}/order/myOrders`, { withCredentials: true })
+        .then(res => {
+          setOrders(res.data.data || []);
+        })
+        .catch(err => console.log(err))
+        .finally(() => setLoading(false));
+    }
+  }, [activeSection, BASE_URL]);
+
+  // ---------- HANDLERS ----------
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewAddress((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+    setNewAddress(prev => ({ ...prev, [name]: value }));
   };
 
-  // ---------- SAVE ADDRESS (Create or Update) ----------
   const handleSaveAddress = async () => {
-    // Validation
     const requiredFields = ["fullName", "phone", "houseNo", "area", "city", "state", "pincode"];
-    const missingFields = requiredFields.filter(field => !newAddress[field]);
-
-    if (missingFields.length > 0) {
-      return toast.error("Please fill all required fields");
-    }
-
-    // Phone validation
-    if (!/^[0-9]{10}$/.test(newAddress.phone)) {
-      return toast.error("Please enter a valid 10-digit phone number");
-    }
-
-    // Pincode validation
-    if (!/^[0-9]{6}$/.test(newAddress.pincode)) {
-      return toast.error("Please enter a valid 6-digit pincode");
-    }
-
+    if (requiredFields.some(f => !newAddress[f])) return toast.error("Please fill all fields");
+    
     setLoading(true);
-
     try {
       if (editingAddressId) {
-        // update address
-        const res = await axios.put(
-          `http://localhost:5000/address/updateAddress/${editingAddressId}`,
-          newAddress,
-          { withCredentials: true }
-        );
-
-        // after updating adress -> ui update
-        setAddresses((prev) =>
-          prev.map((addr) =>
-            addr._id === editingAddressId ? res.data.data : addr
-          )
-        );
-
-        toast.success("Address updated successfully");
-        setEditingAddressId(null);
+        const res = await axios.put(`${BASE_URL}/address/updateAddress/${editingAddressId}`, newAddress, { withCredentials: true });
+        setAddresses(prev => prev.map(a => a._id === editingAddressId ? res.data.data : a));
+        toast.success("Address updated");
       } else {
-        // create new address
-        const res = await axios.post(
-          "http://localhost:5000/address/giveAddress",
-          newAddress,
-          { withCredentials: true }
-        );
-
-        // Update UI
-        setAddresses((prev) => [res.data.data, ...prev]);
-        toast.success("Address saved successfully");
+        const res = await axios.post(`${BASE_URL}/address/giveAddress`, newAddress, { withCredentials: true });
+        setAddresses(prev => [res.data.data, ...prev]);
+        toast.success("Address saved");
       }
-
-      setNewAddress(emptyAddress);
-      setShowAddressForm(false);
+      handleCancelForm();
     } catch (error) {
-      const errorMsg = error.response?.data?.message || "Failed to save address";
-      toast.error(errorMsg);
+      toast.error("Failed to save address");
     } finally {
       setLoading(false);
     }
   };
 
-  // ---------- EDIT ADDRESS ----------
-  const handleEditAddress = (address) => {
-    setNewAddress({
-      fullName: address.fullName,
-      phone: address.phone,
-      houseNo: address.houseNo,
-      area: address.area,
-      city: address.city,
-      state: address.state,
-      pincode: address.pincode
-    });
-    setEditingAddressId(address._id);
-    setShowAddressForm(true);
-  };
-
-  // ---------- DELETE ADDRESS ----------
-  const handleDeleteAddress = async (addressId) => {
-    const confirm = await swal({
-      title: "Delete Address?",
-      text: "You sure you want to delete address",
-      icon: "warning",
-      buttons: ["Cancel", "Yes , Delete"],
-      dangerMode: true,
-    });
-
+  const handleDeleteAddress = async (id) => {
+    const confirm = await swal({ title: "Delete?", text: "Delete this address?", icon: "warning", buttons: true, dangerMode: true });
     if (!confirm) return;
-
-    setLoading(true);
-
     try {
-      await axios.delete(
-        `http://localhost:5000/address/deleteAddress/${addressId}`,
-        { withCredentials: true }
-      );
-
-      // Update UI
-      setAddresses((prev) => prev.filter((addr) => addr._id !== addressId));
-      toast.success("Address deleted successfully");
-    } catch (error) {
-      const errorMsg = error.response?.data?.message || "Failed to delete address";
-      toast.error(errorMsg);
-    } finally {
-      setLoading(false);
-    }
+      await axios.delete(`${BASE_URL}/address/deleteAddress/${id}`, { withCredentials: true });
+      setAddresses(prev => prev.filter(a => a._id !== id));
+      toast.success("Deleted");
+    } catch (err) { toast.error("Error deleting"); }
   };
 
-  // ---------- CANCEL FORM ----------
   const handleCancelForm = () => {
     setShowAddressForm(false);
     setEditingAddressId(null);
     setNewAddress(emptyAddress);
   };
 
-  const BASE_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000"
-    : "https://megakart-backend.onrender.com";
-
-  // ---------- LOGOUT ----------
   const logoutUser = async () => {
-    try {
-      const confirm = await swal({
-        title: "Are you sure you want to logout ??",
-        icon: "warning",
-        buttons: ["Cancel", "Logout"],
-        dangerMode: true,
-      });
-
-      if (!confirm) return;
-
-      await axios.get(`${BASE_URL}/user/logout`, {
-        withCredentials: true
-      });
-
-      dispatch(logout());
-      dispatch(setCart([]));
-      dispatch(setWishlist([]));
-
-      navigate("/login");
-
-    } catch (error) {
-      console.log(error);
-    }
+    const confirm = await swal({ title: "Logout?", icon: "warning", buttons: true });
+    if (!confirm) return;
+    await axios.get(`${BASE_URL}/user/logout`, { withCredentials: true });
+    dispatch(logout());
+    dispatch(setCart([]));
+    dispatch(setWishlist([]));
+    navigate("/login");
   };
 
-  // ---------- UI ----------
   return (
     <div className="min-h-screen bg-[#fcfcfd] flex flex-col md:flex-row">
       <Toaster position="top-right" />
 
       {/* SIDEBAR */}
-      <aside className="w-full md:w-80 bg-white border-r p-8 flex flex-col h-screen">
+      <aside className="w-full md:w-80 bg-white border-r p-8 flex flex-col md:h-screen sticky top-0">
         <div className="flex items-center gap-4 mb-12">
           <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
             {user?.name?.charAt(0).toUpperCase()}
@@ -242,204 +148,120 @@ const ProfilePage = () => {
             <button
               key={id}
               onClick={() => setActiveSection(id)}
-              className={`w-full flex justify-between items-center p-3 rounded-lg capitalize transition-colors ${
-                activeSection === id
-                  ? "bg-amber-500 text-white"
-                  : "hover:bg-gray-100 text-gray-700"
-              }`}
+              className={`w-full flex justify-between items-center p-3 rounded-lg capitalize transition-colors ${activeSection === id ? "bg-amber-500 text-white" : "hover:bg-gray-100 text-gray-700"}`}
             >
-              {id}
-              <ChevronRight size={16} />
+              {id} <ChevronRight size={16} />
             </button>
           ))}
-
-          <button
-            onClick={logoutUser}
-            className="mt-10 flex items-center gap-3 text-red-500 hover:text-red-600 transition-colors"
-          >
+          <button onClick={logoutUser} className="mt-10 flex items-center gap-3 text-red-500 hover:text-red-600 font-medium">
             <LogOut size={18} /> Logout
           </button>
         </nav>
       </aside>
 
-      {/* MAIN */}
-      <main className="flex-1 p-10">
+      {/* MAIN CONTENT */}
+      <main className="flex-1 p-6 md:p-10">
         {activeSection === "profile" && (
-          <div className="max-w-3xl">
+          <div className="max-w-3xl animate-fadeIn">
             <h1 className="text-3xl font-bold mb-6">My Account</h1>
-
-            {/* USER DETAILS */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
               <DetailCard label="Full Name" value={user?.name} />
               <DetailCard label="Email" value={user?.email} />
             </div>
 
-            {/* ADDRESS SECTION */}
-            <div className="bg-white p-8 rounded-xl border shadow-sm">
+            <div className="bg-white p-6 rounded-xl border shadow-sm">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="font-bold text-lg flex items-center gap-2">
-                  <MapPin className="text-[#0a53a7]" size={20} /> 
-                  Saved Addresses
-                </h3>
-
+                <h3 className="font-bold text-lg flex items-center gap-2"><MapPin className="text-blue-600" size={20} /> Saved Addresses</h3>
                 {!showAddressForm && (
-                  <button
-                    onClick={() => setShowAddressForm(true)}
-                    className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors"
-                  >
+                  <button onClick={() => setShowAddressForm(true)} className="flex items-center gap-2 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600">
                     <Plus size={16} /> Add New
                   </button>
                 )}
               </div>
 
-              {/* ADDRESS LIST */}
-              {!showAddressForm && addresses?.length > 0 && (
+              {!showAddressForm ? (
                 <div className="space-y-4">
-                  {addresses.map((addr) => (
-                    <div 
-                      key={addr._id} 
-                      className="border border-gray-200 p-5 rounded-lg hover:shadow-md transition-shadow relative"
-                    >
-                      {/* Action Buttons */}
-                      <div className="absolute top-3 right-3 flex gap-2">
-                        <button
-                          onClick={() => handleEditAddress(addr)}
-                          className="p-2 hover:bg-blue-50 rounded-full transition-colors"
-                          title="Edit Address"
-                        >
-                          <Edit3 size={18} className="text-[#2ba306]" />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteAddress(addr._id)}
-                          className="p-2 hover:bg-red-50 rounded-full transition-colors"
-                          title="Delete Address"
-                          disabled={loading}
-                        >
-                          <Trash2 size={18} className="text-red-600" />
-                        </button>
+                  {addresses.length > 0 ? addresses.map((addr) => (
+                    <div key={addr._id} className="border border-gray-100 p-5 rounded-lg hover:shadow-sm relative bg-gray-50/50">
+                      <div className="absolute top-3 right-3 flex gap-1">
+                        <button onClick={() => handleEditAddress(addr)} className="p-2 hover:bg-white rounded-full text-green-600"><Edit3 size={18} /></button>
+                        <button onClick={() => handleDeleteAddress(addr._id)} className="p-2 hover:bg-white rounded-full text-red-600"><Trash2 size={18} /></button>
                       </div>
-
-                      {/* Address Details */}
-                      <p className="font-semibold text-lg mb-2">{addr.fullName}</p>
-                      <p className="text-sm text-gray-600">
-                        {addr.houseNo}, {addr.area}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {addr.city}, {addr.state} - {addr.pincode}
-                      </p>
-                      <p className="text-sm flex items-center gap-1 mt-3 text-gray-700">
-                        <Phone size={14} /> {addr.phone}
-                      </p>
+                      <p className="font-semibold text-gray-800">{addr.fullName}</p>
+                      <p className="text-sm text-gray-600">{addr.houseNo}, {addr.area}, {addr.city}, {addr.state} - {addr.pincode}</p>
+                      <p className="text-sm flex items-center gap-1 mt-2 text-gray-700 font-medium"><Phone size={14} /> {addr.phone}</p>
                     </div>
-                  ))}
+                  )) : <p className="text-center py-10 text-gray-400 italic">No saved addresses</p>}
                 </div>
-              )}
-
-              {/* EMPTY STATE */}
-              {!showAddressForm && addresses?.length === 0 && (
-                <div className="text-center py-10 text-gray-400">
-                  <MapPin size={48} className="mx-auto mb-4 opacity-50" />
-                  <p>No saved addresses yet</p>
-                  <p className="text-sm">Add your first address to get started</p>
-                </div>
-              )}
-
-              {/* ADDRESS FORM */}
-              {showAddressForm && (
-                <div className="mt-4">
-                  <div className="flex justify-between items-center mb-4">
-                    <h4 className="font-semibold text-gray-700">
-                      {editingAddressId ? "Edit Address" : "Add New Address"}
-                    </h4>
-                    <button
-                      onClick={handleCancelForm}
-                      className="p-2 hover:bg-gray-100 rounded-full"
-                    >
-                      <X size={18} />
-                    </button>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <CustomInput 
-                      name="fullName" 
-                      value={newAddress.fullName} 
-                      placeholder="Full Name *" 
-                      onChange={handleInputChange} 
-                    />
-                    <CustomInput 
-                      name="phone" 
-                      value={newAddress.phone} 
-                      placeholder="Phone Number (10 digits) *" 
-                      onChange={handleInputChange}
-                      maxLength={10}
-                    />
-                    <CustomInput 
-                      name="houseNo" 
-                      value={newAddress.houseNo} 
-                      placeholder="House/Flat No. *" 
-                      onChange={handleInputChange} 
-                    />
-                    <CustomInput 
-                      name="area" 
-                      value={newAddress.area} 
-                      placeholder="Area/Street *" 
-                      onChange={handleInputChange} 
-                    />
-                    <CustomInput 
-                      name="city" 
-                      value={newAddress.city} 
-                      placeholder="City *" 
-                      onChange={handleInputChange} 
-                    />
-                    <CustomInput 
-                      name="state" 
-                      value={newAddress.state} 
-                      placeholder="State *" 
-                      onChange={handleInputChange} 
-                    />
-                    <CustomInput 
-                      name="pincode" 
-                      value={newAddress.pincode} 
-                      placeholder="Pincode (6 digits) *" 
-                      onChange={handleInputChange}
-                      maxLength={6}
-                    />
-                  </div>
-
-                  <div className="flex gap-3 mt-6">
-                    <button 
-                      onClick={handleSaveAddress} 
-                      className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      disabled={loading}
-                    >
-                      {loading ? "Saving..." : editingAddressId ? "Update" : "Save"}
-                    </button>
-                    <button 
-                      onClick={handleCancelForm} 
-                      className="border border-gray-300 px-6 py-2 rounded-lg hover:bg-gray-50 transition-colors"
-                      disabled={loading}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-slideIn">
+                   <CustomInput name="fullName" value={newAddress.fullName} placeholder="Full Name" onChange={handleInputChange} />
+                   <CustomInput name="phone" value={newAddress.phone} placeholder="Phone" onChange={handleInputChange} maxLength={10} />
+                   <CustomInput name="houseNo" value={newAddress.houseNo} placeholder="House No." onChange={handleInputChange} />
+                   <CustomInput name="area" value={newAddress.area} placeholder="Area" onChange={handleInputChange} />
+                   <CustomInput name="city" value={newAddress.city} placeholder="City" onChange={handleInputChange} />
+                   <CustomInput name="state" value={newAddress.state} placeholder="State" onChange={handleInputChange} />
+                   <CustomInput name="pincode" value={newAddress.pincode} placeholder="Pincode" onChange={handleInputChange} maxLength={6} />
+                   <div className="md:col-span-2 flex gap-3 mt-2">
+                     <button onClick={handleSaveAddress} className="bg-green-600 text-white px-8 py-2 rounded-lg font-medium">{editingAddressId ? "Update" : "Save"}</button>
+                     <button onClick={handleCancelForm} className="border px-8 py-2 rounded-lg">Cancel</button>
+                   </div>
                 </div>
               )}
             </div>
           </div>
         )}
 
-        {/* OTHER SECTIONS */}
         {activeSection === "orders" && (
-          <div className="max-w-3xl">
+          <div className="max-w-4xl animate-fadeIn">
             <h1 className="text-3xl font-bold mb-6">My Orders</h1>
-            <p className="text-gray-500">Your order history will appear here</p>
+            {loading ? <p>Loading orders...</p> : orders.length === 0 ? (
+               <div className="text-center py-20 bg-white rounded-xl border">
+                 <Package size={48} className="mx-auto text-gray-300 mb-4" />
+                 <p className="text-gray-500">You haven't placed any orders yet.</p>
+               </div>
+            ) : (
+              <div className="space-y-6">
+                {orders.map((order) => (
+                  <div key={order._id} className="bg-white border rounded-xl overflow-hidden shadow-sm">
+                    <div className="bg-gray-50 px-6 py-3 border-b flex justify-between items-center text-sm">
+                      <div className="flex gap-6">
+                        <div><p className="text-gray-500 uppercase text-[10px] font-bold">Order Placed</p><p>{new Date(order.createdAt).toLocaleDateString()}</p></div>
+                        <div><p className="text-gray-500 uppercase text-[10px] font-bold">Total</p><p className="font-bold">₹{order.totalAmount}</p></div>
+                        <div><p className="text-gray-500 uppercase text-[10px] font-bold">Payment</p><p className="uppercase">{order.paymentMethod}</p></div>
+                      </div>
+                      <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold uppercase">
+                        {order.status || "Processing"}
+                      </span>
+                    </div>
+                    <div className="p-6 space-y-4">
+                      {order.items.map((item, i) => (
+                        <div key={i} className="flex gap-4 items-center">
+                          {/* Safe access to product properties */}
+                          <img src={item.product?.img} className="w-16 h-16 object-cover rounded border" alt="" />
+                          <div className="flex-1">
+                            <p className="font-semibold text-gray-800">{item.product?.title || "Product details unavailable"}</p>
+                            <p className="text-sm text-gray-500 font-medium">Quantity: {item.quantity}</p>
+                          </div>
+                          <div className="text-right">
+                             <p className="font-bold">₹{item.product?.newPrice * item.quantity}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {activeSection === "cancelled" && (
-          <div className="max-w-3xl">
+          <div className="max-w-3xl animate-fadeIn">
             <h1 className="text-3xl font-bold mb-6">Cancelled Orders</h1>
-            <p className="text-gray-500">Your cancelled orders will appear here</p>
+            <div className="bg-white p-10 rounded-xl border text-center text-gray-400">
+              No cancelled orders found.
+            </div>
           </div>
         )}
       </main>
@@ -447,19 +269,15 @@ const ProfilePage = () => {
   );
 };
 
-// -SMALL COMPONENTS = name and email show krne k liye 
 const DetailCard = ({ label, value }) => (
   <div className="bg-white p-6 border rounded-lg shadow-sm">
-    <p className="text-xs text-gray-400 mb-1">{label}</p>
+    <p className="text-xs text-gray-400 mb-1 uppercase font-bold tracking-wider">{label}</p>
     <p className="font-semibold text-gray-800">{value || "Not provided"}</p>
   </div>
 );
 
 const CustomInput = (props) => (
-  <input 
-    {...props} 
-    className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all" 
-  />
+  <input {...props} className="border border-gray-200 p-3 rounded-lg w-full focus:ring-2 focus:ring-amber-500 focus:border-transparent outline-none transition-all bg-gray-50" />
 );
 
 export default ProfilePage;

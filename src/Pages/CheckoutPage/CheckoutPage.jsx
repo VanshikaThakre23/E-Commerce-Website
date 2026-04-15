@@ -4,10 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { MapPin, Plus, Check, ChevronLeft } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-
+import { setCart } from "../../features/cart/cartSlice"; 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();apn ko data me kuch add remove nhi kr rhe so no need of dipatch
+const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart.cartItem);
 
@@ -53,42 +53,45 @@ const CheckoutPage = () => {
   }, [cart]);
   console.log(cart);
 
- const BASE_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000"
-    : "https://megakart-backend.onrender.com";
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
 
-  const handlePlaceOrder = async () => {
-    if (!selectedAddressId) return toast.error("Plase select address");
+const handlePlaceOrder = async () => {
+  if (!selectedAddressId) return toast.error("Please select address");
+  if (!payment) return toast.error("Please select payment method");
 
-    if (!payment) return toast.error("Please select payment");
+  const orderData = {
+    items: cart.map((item) => ({
+      product: item._id,
+      quantity: item.quantity,
+    })),
+    addresses: selectedAddressId,
+    paymentMethod: payment,
+    totalAmount: orderTotal + 12, // Including the tax you displayed
+  };
 
-    const orderData = {
-      items:cart.map((item)=>({
-        product:item._id,
-        quantity:item.quantity,
-        
-      })),
-      addresses:selectedAddressId,
-      paymentMethod:payment,
-      totalAmount:orderTotal,
+  try {
+    const res = await axios.post(`${BASE_URL}/order/placeOrders`, orderData, { 
+      withCredentials: true 
+    });
+
+    if (res.data.success) {
+      toast.success("Order placed successfully!");
+      
+     
+      dispatch(setCart([])); 
+
+    
+      setTimeout(() => {
+        navigate("/profile");
+      }, 1500);
     }
-
-    try {
-      const res = await axios.post(`${BASE_URL}/order/placeOrders`,orderData,{withCredentials:true});
-
-      if(res.data.success){
-        return toast.success("Order placed successfully");
-      }
-      navigate("/profile/myorder");
-
-    } catch (error) {
-      console.log(error);
-    }
-
+  } catch (error) {
+    console.error("Order Error:", error);
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
-
+};
+ 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
 
@@ -257,20 +260,18 @@ const CheckoutPage = () => {
               <div className="flex justify-between font-bold text-lg border-t pt-3 mt-3">
                 <span>Total</span>
                 <span>
-                  Rs
-                  {orderTotal.toFixed(2)}
+                  Rs. {(orderTotal+12).toFixed(2)}
                 </span>
               </div>
 
               {/* Checkout */}
-              <Link to="/checkout">
+            
                 <button className="w-full mt-5 bg-amber-600 text-white py-3 rounded-lg font-semibold"
                   onClick={handlePlaceOrder}
                 >
                   Place Order
                 </button>
-              </Link>
-
+           
               <p className="text-xs text-gray-500 mt-4 text-center">
                 Secure purchase.Enjoy your Shopping
               </p>
