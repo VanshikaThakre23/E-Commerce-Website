@@ -58,7 +58,7 @@ const ProductDetails = () => {
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
 
                     {/* IMAGE SECTION */}
-                    <div className="lg:w-3/5 bg-[#f9f9f9] flex items-center justify-center p-4 sm:p-8 lg:p-12 min-h-[300px] sm:min-h-[450px] lg:min-h-125">
+                    <div className="lg:w-3/5 bg-[#f9f9f9] flex items-center justify-center p-4 sm:p-8 lg:p-12 min-h-75 sm:min-h-112.5 lg:min-h-125">
 
                         <Swiper
                             slidesPerView={1}
@@ -74,7 +74,7 @@ const ProductDetails = () => {
                                     <img
                                         src={product.img}
                                         alt={product.title}
-                                        className="w-full h-[250px] sm:h-[350px] lg:h-auto object-contain"
+                                        className="w-full h-62.5 sm:h-87.5 lg:h-auto object-contain"
                                     />
                                 </SwiperSlide>
                             )}
@@ -84,7 +84,7 @@ const ProductDetails = () => {
                                     <img
                                         src={product.alternateimg}
                                         alt="alternate"
-                                        className="w-full h-[250px] sm:h-[350px] lg:h-auto object-contain"
+                                        className="w-full h-62.5 sm:h-87.5 lg:h-auto object-contain"
                                     />
                                 </SwiperSlide>
                             )}

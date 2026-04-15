@@ -44,12 +44,10 @@ const Banner = () => {
                         <div className="
                             absolute 
                             /* Reduced 'right' values to move text right */
-                            right-0 sm:right-1 md:right-2 
-                            /* Added pr-4 to ensure text doesn't hit the very edge */
-                            pr-4 md:pr-6
+                            right-0 sm:right-1 md:right-2 pr-4 md:pr-6
                             p-2 
                             w-[60%] sm:w-[55%] md:w-[50%]
-                            text-right /* Optional: Aligns text lines to the right */
+                            text-right
                         ">
                             <h3 className="
                                 font-bold 
