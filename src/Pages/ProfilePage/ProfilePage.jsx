@@ -100,6 +100,19 @@ const ProfilePage = () => {
       setLoading(false);
     }
   };
+  const handleEditAddress = (addr) => {
+  setEditingAddressId(addr._id);
+  setNewAddress({
+    fullName: addr.fullName,
+    phone: addr.phone,
+    houseNo: addr.houseNo,
+    area: addr.area,
+    city: addr.city,
+    state: addr.state,
+    pincode: addr.pincode
+  });
+  setShowAddressForm(true);
+};
 
   const handleDeleteAddress = async (id) => {
     const confirm = await swal({ title: "Delete?", text: "Delete this address?", icon: "warning", buttons: true, dangerMode: true });
@@ -116,16 +129,28 @@ const ProfilePage = () => {
     setEditingAddressId(null);
     setNewAddress(emptyAddress);
   };
+const logoutUser = async () => {
+  const confirm = await swal({ title: "Logout?", icon: "warning", buttons: true });
+  if (!confirm) return;
 
-  const logoutUser = async () => {
-    const confirm = await swal({ title: "Logout?", icon: "warning", buttons: true });
-    if (!confirm) return;
+  try {
     await axios.get(`${BASE_URL}/user/logout`, { withCredentials: true });
+    
+    // 1. Clear Redux
     dispatch(logout());
     dispatch(setCart([]));
     dispatch(setWishlist([]));
+    
+    // 2. Clear Session/Local Storage if you use it for guest carts
+    localStorage.removeItem("user"); 
+    // Do NOT use localStorage.clear() as it might delete theme settings, etc.
+    
     navigate("/login");
-  };
+    toast.success("Logged out successfully");
+  } catch (err) {
+    toast.error("Logout failed");
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#fcfcfd] flex flex-col md:flex-row">

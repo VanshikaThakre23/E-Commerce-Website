@@ -43,7 +43,7 @@ const Login = () => {
 
       dispatch(login(user));
 
-      const userId = user?._id;
+      const userId = user?.email;
 
       const userCart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
 

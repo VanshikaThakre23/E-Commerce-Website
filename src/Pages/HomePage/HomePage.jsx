@@ -37,7 +37,7 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-
+const cart = useSelector((state) => state.cart);
   const [products, setProducts] = useState([]);
   const [popularProducts, setPopularProducts] = useState([]);
   const [latestProducts, setLatestProducts] = useState([]);
@@ -66,6 +66,9 @@ const HomePage = () => {
 
 
   console.log(user);
+  console.log(JSON.stringify(localStorage, null, 2));
+  console.log(cart)
+  
 
   const BASE_URL = import.meta.env.VITE_API_URL;
  
@@ -119,21 +122,25 @@ const HomePage = () => {
         <div className="container mx-auto px-4">
 
           {/* Popular Section */}
-          <div className="flex items-center justify-between gap-6 mt-10">
-            <div className="w-[30%]">
-              <h3 className="text-[22px] font-semibold">Popular Products</h3>
-              <p className="text-[12px] font-semibold">
+        {/* Popular Section - Responsive Header */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mt-10">
+            {/* Title Section: Full width on mobile, 30% on desktop */}
+            <div className="w-full md:w-[30%]">
+              <h3 className="text-[20px] md:text-[22px] font-semibold">Popular Products</h3>
+              <p className="text-[12px] font-semibold text-gray-500">
                 Do not miss the current offers until the end of March
               </p>
             </div>
 
-            <div className="w-[70%]">
-              <Box sx={{ flexGrow: 1, width: "100%", bgcolor: "background.paper" }}>
+            {/* Tabs Section: Full width on mobile, 70% on desktop */}
+            <div className="w-full md:w-[70%] overflow-hidden">
+              <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
                 <Tabs
                   value={value}
                   onChange={handleChange}
                   variant="scrollable"
-                  scrollButtons
+                  scrollButtons="auto" // Better for mobile touch
+                  allowScrollButtonsMobile
                 >
                   {tabsList.map((item) => (
                     <Tab key={item.id} label={item.title} />
@@ -143,14 +150,17 @@ const HomePage = () => {
             </div>
           </div>
 
-          <ProductItem items={selectedCategoryProducts} />
+          {/* Product Grid (Handled by ProductItem internal responsiveness) */}
+          <div className="mt-6">
+             <ProductItem items={selectedCategoryProducts} />
+          </div>
 
-          {/* Banner */}
-          <div className="mt-5 border-2 rounded-2xl overflow-hidden group">
+          {/* Banner - Responsive Padding/Scale */}
+          <div className="mt-8 border-2 rounded-xl md:rounded-2xl overflow-hidden group">
             <img
               src="/images/bannerimg1.png"
               alt="banner"
-              className="transition-all duration-200 group-hover:scale-110"
+              className="w-full h-auto object-cover transition-all duration-200 group-hover:scale-105"
             />
           </div>
 
@@ -164,25 +174,7 @@ const HomePage = () => {
             slidesPerView={5}
           />
 
-          {/* Testimonials */}
-          {/* <ReusableSlider
-            title="See What our Customer Says"
-            data={testimonials}
-            renderItem={(item) => (
-              <div className="bg-white p-6 rounded-xl shadow text-center border">
-                <img
-                  src={item.img}
-                  alt={item.name}
-                  className="w-30 h-30 rounded-full mx-auto mb-4"
-                />
-                <p className="text-sm text-gray-600 mb-2">
-                  "{item.feedback}"
-                </p>
-                <h4 className="font-semibold">{item.name}</h4>
-              </div>
-            )}
-            slidesPerView={4}
-          /> */}
+        
         </div>
       </div>
 

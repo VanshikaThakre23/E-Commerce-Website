@@ -24,7 +24,23 @@ import MyOrderPage from './Pages/MyOrderPage/MyOrderPage.jsx';
 import ViewOrders from './Pages/Admin/ViewOrders.jsx';
 
 
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCartAPI } from "./features/cart/cartActions.js";
+
 const App = () => {
+
+  const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth.user);
+
+    useEffect(() => {
+        // Only fetch from DB if a user is logged in
+        if (user) {
+            dispatch(fetchCartAPI());
+        }
+    }, [user, dispatch]);
+
+
   return (
     <>
       <BrowserRouter>
