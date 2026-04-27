@@ -36,11 +36,10 @@ const cartSlice = createSlice({
         },
 
         removeFromCart: (state, action) => {
-            // 1. Create the new list
-            const updatedCart = state.cartItem.filter((item) => item._id !== action.payload);
-            // 2. Update State
+            const updatedCart = state.cartItem.filter(
+                (item) => item._id !== action.payload
+            );
             state.cartItem = updatedCart;
-            // 3. Force update LocalStorage immediately with the NEW list
             localStorage.setItem(getCartKey(), JSON.stringify(updatedCart));
         },
 
@@ -57,12 +56,12 @@ const cartSlice = createSlice({
             state.cartItem = action.payload;
             localStorage.setItem(getCartKey(), JSON.stringify(action.payload));
         },
-       clearCart: (state) => {
-    state.cartItem = [];
-    localStorage.removeItem(getCartKey());
-},
+        clearCart: (state) => {
+            state.cartItem = [];
+            localStorage.removeItem(getCartKey());
+        },
 
-        
+
     }
 });
 

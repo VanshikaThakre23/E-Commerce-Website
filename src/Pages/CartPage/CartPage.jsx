@@ -4,7 +4,9 @@ import { addToWishlist } from "../../features/wishlist/wishlistSlice";
 import { removeFromCart, updateInCart } from "../../features/cart/cartSlice";
 import { useSelector, useDispatch } from 'react-redux';
 import swal from 'sweetalert';
+import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { fetchCartAPI } from "../../features/cart/cartActions";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -31,6 +33,14 @@ const CartPage = () => {
     });
 
     if (willDelete) {
+      // 1. Update backend
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}/user/remove-from-cart/${id}`,
+        { withCredentials: true }
+      );
+      dispatch(fetchCartAPI());
+
+      // 2. Then update Redux
       dispatch(removeFromCart(id));
       toast.success("Item removed successfully");
     }
@@ -68,16 +78,16 @@ const CartPage = () => {
 
                   <div className="flex flex-wrap items-center gap-2 mt-2 text-sm">
                     <label>Qty:</label>
-                    <input 
-                      type="number" 
-                      value={item.quantity} 
+                    <input
+                      type="number"
+                      value={item.quantity ?? 1}
                       min={1}
                       onChange={(e) => {
                         dispatch(updateInCart({
                           id: item._id,
-                          qty: Number(e.target.value)
+                          qty: Number(e.target.value) || 1
                         }))
-                      }}    
+                      }}
                       className="w-14 md:w-16 px-2 py-1 border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                     <button
